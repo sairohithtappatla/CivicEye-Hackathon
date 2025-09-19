@@ -4,6 +4,26 @@
 
 /* ---------- GOV-THEME CUSTOM CLASSES ---------- */
 
+/* page background */
+body {
+  @apply min-h-screen;
+  background: linear-gradient(135deg, #ec4899, #8b5cf6); /* pink to purple */
+  background-size: 200% 200%;
+  animation: bgGradient 8s ease infinite;
+}
+
+/* animate background gradient */
+@keyframes bgGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* card / container */
+.gov-card {
+  @apply bg-white shadow-xl rounded-3xl p-6 sm:p-10 w-full max-w-2xl mx-auto transition-all duration-200;
+  border: 2px solid black; /* black highlight */
+  animation: fadeIn 0.5s ease forwards;
 /* card / container */
 .gov-card {
   @apply bg-gradient-to-br from-white to-slate-50 shadow-xl rounded-3xl p-6 sm:p-10 w-full max-w-2xl mx-auto border border-slate-100;
@@ -20,6 +40,7 @@
 .gov-tag {
   @apply mt-1 text-sm sm:text-base font-medium;
   color: rgb(34,197,94); /* green accent */
+  animation: slideUp 0.6s ease forwards;
 }
 
 /* little badge strip */
@@ -43,6 +64,12 @@
 
 /* upload area as a styled label (file input hidden) */
 .gov-file {
+  @apply w-full rounded-lg border-dashed border-2 border-purple-200 p-4 flex items-center justify-between gap-4 cursor-pointer transition-all duration-200 hover:border-purple-300;
+  background-color: rgba(139, 92, 246, 0.02);
+}
+.gov-file:hover {
+  transform: translateY(-3px);
+  background-color: rgba(139, 92, 246, 0.05);
   @apply w-full rounded-lg border-dashed border-2 border-slate-200 p-4 flex items-center justify-between gap-4 cursor-pointer transition-all duration-200 hover:border-indigo-300;
   background-color: rgba(59,130,246,0.02);
 }
@@ -53,6 +80,7 @@
 /* styled "Upload" button inside label */
 .gov-file-btn {
   @apply inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium shadow-sm transition transform;
+  background: linear-gradient(90deg,#ff9900,#f97316);
   background: linear-gradient(90deg,#ff9900,#f97316); /* saffron gradient */
   color: white;
 }
@@ -73,6 +101,26 @@
 }
 .gov-loc-btn {
   @apply inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition;
+  background: linear-gradient(90deg,#06b6d4,#3b82f6);
+  color: white;
+  box-shadow: 0 6px 18px rgba(59,130,246,0.12);
+}
+
+/* copy coords button */
+.gov-copy {
+  @apply inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition;
+  background: linear-gradient(90deg,#10b981,#3b82f6);
+  color: white;
+  box-shadow: 0 6px 18px rgba(59,130,246,0.12);
+}
+
+/* flash green when copied */
+@keyframes flashSuccess {
+  0% { background: #22c55e; }
+  100% { background: linear-gradient(90deg,#10b981,#3b82f6); }
+}
+.gov-copy.success {
+  animation: flashSuccess 0.8s ease;
   background: linear-gradient(90deg,#06b6d4,#3b82f6); /* teal to blue */
   color: white;
   box-shadow: 0 6px 18px rgba(59,130,246,0.12);
@@ -84,11 +132,21 @@
 /* submit */
 .gov-submit {
   @apply w-full mt-2 py-3 rounded-xl text-sm font-bold transition-all duration-200;
+  background: linear-gradient(90deg, #a78bfa, #7c3aed);
+  color: white;
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.12);
+}
+.gov-submit:hover {
+  transform: translateY(-3px);
+  background: linear-gradient(90deg, #7c3aed, #4c1d95);
+}
+=======
   background: linear-gradient(90deg,#0ea5b7,#065f46);
   color: white;
   box-shadow: 0 8px 24px rgba(6,95,70,0.12);
 }
 .gov-submit:hover { transform: translateY(-3px); }
+
 
 /* subtle footer */
 .gov-footer {
@@ -100,6 +158,7 @@
   @apply fixed right-6 bottom-6 bg-indigo-600 text-white px-4 py-2 rounded-lg shadow-lg text-sm;
   animation: toast-in 320ms ease;
 }
+
 @keyframes toast-in {
   from { transform: translateY(12px); opacity: 0; } 
   to { transform: translateY(0); opacity: 1; }

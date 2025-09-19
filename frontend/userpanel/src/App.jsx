@@ -1,3 +1,20 @@
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
+import ReportForm from "./pages/ReportForm";
+
+function App() {
+  return (
+    <Router>
+      <div className="min-h-screen bg-slate-100 p-8">
+        <Routes>
+          {/* Default homepage → Dashboard */}
+          <Route path="/" element={<Dashboard />} />
+          {/* Report page */}
+          <Route path="/report" element={<ReportForm />} />
+        </Routes>
+      </div>
+    </Router>
 import { useState, useRef } from "react";
 import axios from "axios";
 import "./index.css"; // loads Tailwind + custom classes
@@ -228,6 +245,7 @@ function App() {
       {/* toast */}
       {toast && <div className="gov-toast" role="status">{toast}</div>}
     </div>
+
   );
 }
 
