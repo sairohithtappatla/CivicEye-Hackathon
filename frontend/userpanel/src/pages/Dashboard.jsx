@@ -5,9 +5,6 @@ import CityProgress from "../components/CityProgress";
 import RecentReports from "../components/RecentReports";
 import CommunityEngagement from "../components/CommunityEngagement";
 import Toast from "../components/Toast";
-import FileUpload from "../components/FileUpload";
-import IssueDropdown from "../components/IssueDropdown";
-import LocationPicker from "../components/LocationPicker";
 
 function Dashboard() {
   return (
@@ -19,9 +16,6 @@ function Dashboard() {
       <CommunityEngagement />
       {/* Removed Description since no such component exists */}
       <Toast />
-      <FileUpload />
-      <IssueDropdown />
-      <LocationPicker />
     </div>
   );
 }
