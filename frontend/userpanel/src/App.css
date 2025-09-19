@@ -1,42 +1,23 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.gov-card {
+  @apply w-full max-w-[400px] bg-white rounded-2xl shadow-lg p-6 mx-auto;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.gov-title {
+  @apply text-2xl font-bold text-center text-indigo-700 mb-2;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.gov-tag {
+  @apply text-center text-gray-600 mb-6;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.gov-input {
+  @apply w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500 outline-none mb-4;
 }
 
-.card {
-  padding: 2em;
+.gov-btn {
+  @apply w-full bg-indigo-600 text-white font-semibold py-2 rounded-lg transition duration-300 ease-in-out hover:bg-indigo-700;
 }
 
-.read-the-docs {
-  color: #888;
+.gov-btn-secondary {
+  @apply w-full bg-green-600 text-white font-semibold py-2 rounded-lg transition duration-300 ease-in-out hover:bg-green-700;
 }
