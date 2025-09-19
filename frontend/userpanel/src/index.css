@@ -24,6 +24,9 @@ body {
   @apply bg-white shadow-xl rounded-3xl p-6 sm:p-10 w-full max-w-2xl mx-auto transition-all duration-200;
   border: 2px solid black; /* black highlight */
   animation: fadeIn 0.5s ease forwards;
+/* card / container */
+.gov-card {
+  @apply bg-gradient-to-br from-white to-slate-50 shadow-xl rounded-3xl p-6 sm:p-10 w-full max-w-2xl mx-auto border border-slate-100;
 }
 
 /* hero heading and tagline */
@@ -67,12 +70,18 @@ body {
 .gov-file:hover {
   transform: translateY(-3px);
   background-color: rgba(139, 92, 246, 0.05);
+  @apply w-full rounded-lg border-dashed border-2 border-slate-200 p-4 flex items-center justify-between gap-4 cursor-pointer transition-all duration-200 hover:border-indigo-300;
+  background-color: rgba(59,130,246,0.02);
+}
+.gov-file:hover {
+  transform: translateY(-3px);
 }
 
 /* styled "Upload" button inside label */
 .gov-file-btn {
   @apply inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium shadow-sm transition transform;
   background: linear-gradient(90deg,#ff9900,#f97316);
+  background: linear-gradient(90deg,#ff9900,#f97316); /* saffron gradient */
   color: white;
 }
 
@@ -112,6 +121,12 @@ body {
 }
 .gov-copy.success {
   animation: flashSuccess 0.8s ease;
+  background: linear-gradient(90deg,#06b6d4,#3b82f6); /* teal to blue */
+  color: white;
+  box-shadow: 0 6px 18px rgba(59,130,246,0.12);
+}
+.gov-copy {
+  @apply text-xs text-slate-600 px-2 py-1 rounded-md border border-slate-100;
 }
 
 /* submit */
@@ -125,6 +140,13 @@ body {
   transform: translateY(-3px);
   background: linear-gradient(90deg, #7c3aed, #4c1d95);
 }
+=======
+  background: linear-gradient(90deg,#0ea5b7,#065f46);
+  color: white;
+  box-shadow: 0 8px 24px rgba(6,95,70,0.12);
+}
+.gov-submit:hover { transform: translateY(-3px); }
+
 
 /* subtle footer */
 .gov-footer {
@@ -135,6 +157,11 @@ body {
 .gov-toast {
   @apply fixed right-6 bottom-6 bg-indigo-600 text-white px-4 py-2 rounded-lg shadow-lg text-sm;
   animation: toast-in 320ms ease;
+}
+
+@keyframes toast-in {
+  from { transform: translateY(12px); opacity: 0; } 
+  to { transform: translateY(0); opacity: 1; }
 }
 
 /* Responsive tweaks */
@@ -160,4 +187,8 @@ body {
 @keyframes toast-in {
   from { transform: translateY(12px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
+}
+.gov-toast {
+  @apply fixed right-6 bottom-6 bg-indigo-600 text-white px-4 py-2 rounded-lg shadow-lg text-sm;
+  animation: toast-in 320ms ease;
 }
