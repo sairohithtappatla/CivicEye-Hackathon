@@ -1,5 +1,6 @@
-import React from "react";
-import { Plus } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Plus, MapPin, TrendingUp, Clock } from "lucide-react";
+import { userAPI, analyticsAPI } from "../services/api";
 
 const quickCategories = [
   {
@@ -75,112 +76,252 @@ const quickCategories = [
 ];
 
 function HomePage({ onCategorySelect, onReportClick }) {
-  const handleTouchStart = (e) => {
-    // Prevent any interference with native scrolling
-    e.stopPropagation();
+  const [userSuggestions, setUserSuggestions] = useState(null);
+  const [communityStats, setCommunityStats] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [userLocation, setUserLocation] = useState({ lat: null, lng: null });
+
+  useEffect(() => {
+    getCurrentLocation();
+    fetchCommunityData();
+  }, []);
+
+  const getCurrentLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          setUserLocation({ lat, lng });
+          fetchUserSuggestions(lat, lng);
+        },
+        (error) => {
+          console.warn("Location error:", error);
+          // Use default Bengaluru coordinates
+          setUserLocation({ lat: 12.9716, lng: 77.5946 });
+          fetchUserSuggestions(12.9716, 77.5946);
+        }
+      );
+    } else {
+      setUserLocation({ lat: 12.9716, lng: 77.5946 });
+      fetchUserSuggestions(12.9716, 77.5946);
+    }
   };
 
-  const handleTouchMove = (e) => {
-    // Allow horizontal scrolling, prevent vertical
-    e.stopPropagation();
+  const fetchUserSuggestions = async (latitude, longitude) => {
+    try {
+      const email = "rajesh.kumar@civiceye.com"; // In real app, get from auth context
+      const response = await userAPI.getSuggestions(email, latitude, longitude);
+
+      if (response.success) {
+        setUserSuggestions(response.suggestions);
+      }
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
+    }
+  };
+
+  const fetchCommunityData = async () => {
+    try {
+      const response = await analyticsAPI.getCommunityAnalytics();
+
+      if (response.success) {
+        setCommunityStats(response.analytics);
+      }
+    } catch (error) {
+      console.error("Error fetching community data:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="civic-page">
-      {/* Header */}
-      <div className="civic-header-home">
+      {/* Enhanced Header with Location */}
+      <div className="civic-page-header">
         <div className="civic-header-content">
-          <div className="civic-header-icon">🏛️</div>
-          <div className="civic-header-text">
-            <h1 className="civic-header-title">CivicEye</h1>
-            <p className="civic-header-subtitle">Report. Resolve. Rise.</p>
+          <div className="civic-greeting-section">
+            <div className="civic-greeting-main">
+              <h1 className="civic-greeting-title">🏛️ CivicEye</h1>
+              <p className="civic-greeting-subtitle">
+                Building better communities together
+              </p>
+            </div>
+            <div className="civic-location-badge">
+              <MapPin size={14} />
+              <span>HSR Layout, Bengaluru</span>
+            </div>
           </div>
         </div>
-
-        <button onClick={onReportClick} className="civic-report-button">
-          <Plus size={16} />
-          Report Issue
-        </button>
       </div>
 
-      {/* Scrollable Quick Categories */}
+      {/* Smart Suggestions Section */}
+      {userSuggestions?.quickActions && (
+        <div className="civic-section">
+          <div className="civic-section-header">
+            <h2 className="civic-section-title">Smart Suggestions</h2>
+            <p className="civic-section-subtitle">
+              Based on your location and activity
+            </p>
+          </div>
+          <div className="civic-suggestions-grid">
+            {userSuggestions.quickActions
+              .slice(0, 4)
+              .map((suggestion, index) => (
+                <button
+                  key={index}
+                  onClick={() => onCategorySelect(suggestion.category)}
+                  className={`civic-suggestion-card civic-suggestion-${suggestion.priority}`}
+                >
+                  <div className="civic-suggestion-icon">
+                    {getCategoryIcon(suggestion.category)}
+                  </div>
+                  <div className="civic-suggestion-content">
+                    <span className="civic-suggestion-label">
+                      {suggestion.label}
+                    </span>
+                    <span className="civic-suggestion-priority">
+                      {suggestion.priority} priority
+                    </span>
+                  </div>
+                </button>
+              ))}
+          </div>
+        </div>
+      )}
+
+      {/* Community Impact Stats */}
+      {communityStats && (
+        <div className="civic-section">
+          <div className="civic-section-header">
+            <h2 className="civic-section-title">Community Impact</h2>
+            <p className="civic-section-subtitle">
+              Real-time progress in your area
+            </p>
+          </div>
+          <div className="civic-impact-stats-grid">
+            <div className="civic-impact-stat">
+              <div className="civic-impact-stat-icon">📊</div>
+              <div className="civic-impact-stat-content">
+                <div className="civic-impact-stat-number">
+                  {communityStats.totalReports || 0}
+                </div>
+                <div className="civic-impact-stat-label">Total Reports</div>
+              </div>
+            </div>
+            <div className="civic-impact-stat">
+              <div className="civic-impact-stat-icon">✅</div>
+              <div className="civic-impact-stat-content">
+                <div className="civic-impact-stat-number">
+                  {communityStats.resolvedReports || 0}
+                </div>
+                <div className="civic-impact-stat-label">Resolved</div>
+              </div>
+            </div>
+            <div className="civic-impact-stat">
+              <div className="civic-impact-stat-icon">⏱️</div>
+              <div className="civic-impact-stat-content">
+                <div className="civic-impact-stat-number">
+                  {communityStats.avgResolutionTime || "N/A"}
+                </div>
+                <div className="civic-impact-stat-label">Avg Resolution</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Existing Quick Categories */}
       <div className="civic-section">
         <div className="civic-section-header">
-          <h2 className="civic-section-title">Quick Report Categories</h2>
+          <h2 className="civic-section-title">Report Issues</h2>
           <p className="civic-section-subtitle">
-            Tap a category to report quickly
+            Select a category to get started
           </p>
         </div>
 
         <div className="civic-categories-scroll-container">
-          <p className="civic-scroll-help">← Swipe to see more categories →</p>
-          <div
-            className="civic-categories-scroll-track"
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-          >
+          <div className="civic-categories-scroll-track">
             {quickCategories.map((category) => (
-              <div
+              <button
                 key={category.key}
+                onClick={() => onCategorySelect(category.reportValue)}
                 className="civic-category-scroll-card"
-                onClick={() => onCategorySelect(category)}
               >
                 <div className="civic-category-scroll-icon">
-                  {category.icon}
+                  <span className="civic-category-scroll-emoji">
+                    {category.icon}
+                  </span>
                 </div>
                 <div className="civic-category-scroll-content">
                   <span className="civic-category-scroll-label">
                     {category.label}
                   </span>
-                  <span className="civic-category-scroll-desc">
+                  <span className="civic-category-scroll-description">
                     {category.description}
                   </span>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
-          <div className="civic-scroll-indicator">
-            <span className="civic-scroll-hint">Swipe for more →</span>
-          </div>
         </div>
       </div>
 
-      {/* City Progress */}
+      {/* Quick Report Button */}
       <div className="civic-section">
-        <div className="civic-section-header">
-          <h2 className="civic-section-title">City Progress</h2>
-        </div>
-        <div className="civic-stats-grid">
-          <div className="civic-stat-card">
-            <div className="civic-stat-icon">🔍</div>
-            <div className="civic-stat-number">127</div>
-            <div className="civic-stat-label">Total Reports</div>
-          </div>
-          <div className="civic-stat-card">
-            <div className="civic-stat-icon">⏰</div>
-            <div className="civic-stat-number">23</div>
-            <div className="civic-stat-label">Pending</div>
-          </div>
-          <div className="civic-stat-card">
-            <div className="civic-stat-icon">✅</div>
-            <div className="civic-stat-number">104</div>
-            <div className="civic-stat-label">Resolved</div>
-          </div>
-        </div>
+        <button onClick={onReportClick} className="civic-quick-report-button">
+          <Plus size={24} />
+          <span>Quick Report</span>
+        </button>
       </div>
 
-      {/* Recent Reports */}
-      <div className="civic-section">
-        <div className="civic-section-header">
-          <h2 className="civic-section-title">Recent Reports</h2>
+      {/* Trending Categories */}
+      {userSuggestions?.trendingCategories && (
+        <div className="civic-section">
+          <div className="civic-section-header">
+            <h2 className="civic-section-title">Trending in Your Area</h2>
+            <p className="civic-section-subtitle">
+              Most reported issues nearby
+            </p>
+          </div>
+          <div className="civic-trending-list">
+            {userSuggestions.trendingCategories
+              .slice(0, 3)
+              .map((trending, index) => (
+                <div key={index} className="civic-trending-item">
+                  <div className="civic-trending-icon">
+                    {getCategoryIcon(trending.category)}
+                  </div>
+                  <div className="civic-trending-content">
+                    <span className="civic-trending-category">
+                      {trending.category}
+                    </span>
+                    <span className="civic-trending-count">
+                      {trending.count} reports this week
+                    </span>
+                  </div>
+                  <TrendingUp size={16} className="civic-trending-arrow" />
+                </div>
+              ))}
+          </div>
         </div>
-        <div className="civic-empty-state">
-          <div className="civic-empty-icon">📋</div>
-          <p className="civic-empty-text">Loading recent reports...</p>
-        </div>
-      </div>
+      )}
     </div>
   );
+
+  function getCategoryIcon(category) {
+    const icons = {
+      garbage: "🗑️",
+      streetlight: "💡",
+      pothole: "🕳️",
+      water: "💧",
+      traffic: "🚦",
+      drainage: "🌊",
+      electricity: "⚡",
+      noise: "🔊",
+    };
+    return icons[category] || "📋";
+  }
 }
 
 export default HomePage;

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-import axios from "axios";
 import { Camera, MapPin, CheckCircle } from "lucide-react";
+import { reportAPI } from "../services/api";
 
 const issueTypes = [
   { value: "pothole", label: "Road", icon: "🕳️" },
@@ -326,64 +326,171 @@ function ReportForm({ onBack, preSelectedCategory = null }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!desc.trim()) {
-      showToast("📝 Please describe the issue");
-      return;
-    }
-
-    if (!issueType) {
-      showToast("🏷️ Please select issue type");
-      return;
-    }
-
-    if (!photo) {
-      showToast("📷 Photo is required");
+    if (!issueType || !desc.trim()) {
+      showToast("❌ Please fill in all required fields");
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      const formData = new FormData();
-      formData.append("description", desc);
-      formData.append("category", issueType);
-      formData.append("issueType", issueType);
-      formData.append("reporterName", "Civic User");
-      formData.append("reportedBy", "user@civiceye.com");
-      formData.append("photo", photo);
+      // Prepare report data
+      const reportData = {
+        issueType,
+        description: desc.trim(),
+        latitude: lat || 12.9716, // Default to Bangalore coordinates if no GPS
+        longitude: lng || 77.5946,
+        photo: photo,
+        metadata: photoMetadata,
+        submittedAt: new Date().toISOString(),
+      };
 
-      if (photoMetadata) {
-        formData.append("photoMetadata", JSON.stringify(photoMetadata));
-      }
+      console.log("Submitting report:", reportData);
 
-      if (lat && lng) {
-        formData.append("latitude", lat);
-        formData.append("longitude", lng);
-      }
-
-      const response = await axios.post(
-        "http://localhost:3000/api/reports/submit",
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
+      // Submit to backend API
+      const response = await reportAPI.submitReport(reportData);
 
       if (response.data.success) {
-        setSubmissionResult({
-          ticketNumber: response.data.report.ticketNumber,
-          issueType: issueType,
-          category: preSelectedCategory || {
-            label: issueType.charAt(0).toUpperCase() + issueType.slice(1),
-            icon: issueTypes.find((t) => t.value === issueType)?.icon || "📋",
-          },
-          submittedAt: new Date(),
-          estimatedResolution: "3-5 business days",
-        });
-        setShowSuccess(true);
+        showToast("✅ Report submitted successfully!");
+        console.log("Report submitted:", response.data.report);
+
+        // Reset form
+        setIssueType("");
+        setDesc("");
+        setPhoto(null);
+        setPhotoURL(null);
+        setPhotoMetadata(null);
+        setLat(null);
+        setLng(null);
+        setLocationAccuracy(null);
+
+        // Go back to home after delay
+        setTimeout(() => {
+          onBack();
+        }, 2000);
+      } else {
+        throw new Error(response.data.message || "Submission failed");
       }
     } catch (error) {
-      showToast("❌ Submission failed. Try again.");
+      console.error("Report submission error:", error);
+
+      if (error.message.includes("User already exists")) {
+        showToast("❌ Please login to submit reports");
+      } else if (error.message.includes("File too large")) {
+        showToast("❌ File too large. Please use a smaller image");
+      } else if (error.response?.data?.message) {
+        showToast(`❌ ${error.response.data.message}`);
+      } else {
+        showToast("❌ Failed to submit report. Please try again.");
+      }
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleSubmitReport = async () => {
+    if (!issueType || !desc.trim()) {
+      showToast("Please fill all required fields");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Prepare report data for backend
+      const reportData = {
+        category: issueType,
+        description: desc.trim(),
+        priority: getPriorityFromCategory(issueType),
+        location: {
+          address: "Location not specified",
+          coordinates: lat && lng ? [lng, lat] : null,
+          area: "Unknown Area",
+        },
+        reporterEmail: "rajesh.kumar@civiceye.com", // In real app, get from auth context
+        reporterName: "Rajesh Kumar", // In real app, get from auth context
+        additionalDetails: {
+          landmark: null,
+          urgency:
+            issueType === "water" || issueType === "traffic"
+              ? "high"
+              : "medium",
+          contactPhone: "+91 98765 43210", // In real app, get from user profile
+        },
+      };
+
+      // Add photo if available
+      if (photo) {
+        // Convert photo to base64 for backend
+        const reader = new FileReader();
+        reader.onload = async (event) => {
+          reportData.photo = {
+            data: event.target.result,
+            metadata: photoMetadata,
+          };
+
+          await submitToBackend(reportData);
+        };
+        reader.readAsDataURL(photo);
+      } else {
+        await submitToBackend(reportData);
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      showToast("❌ Failed to submit report. Please try again.");
+      setIsSubmitting(false);
+    }
+  };
+
+  const submitToBackend = async (reportData) => {
+    try {
+      const response = await reportAPI.submitReport(reportData);
+
+      if (response.success) {
+        showToast(
+          `✅ Report submitted! Ticket: ${response.report.ticketNumber}`
+        );
+
+        // Reset form
+        setTimeout(() => {
+          resetForm();
+          onBack();
+        }, 2000);
+      } else {
+        throw new Error(response.error || "Submission failed");
+      }
+    } catch (error) {
+      console.error("Backend submission error:", error);
+      showToast("❌ Failed to submit report. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const getPriorityFromCategory = (category) => {
+    const priorities = {
+      water: "critical",
+      electricity: "high",
+      traffic: "critical",
+      drainage: "high",
+      streetlight: "medium",
+      pothole: "high",
+      garbage: "medium",
+      noise: "low",
+    };
+    return priorities[category] || "medium";
+  };
+
+  const resetForm = () => {
+    setIssueType(null);
+    setDesc("");
+    setLat(null);
+    setLng(null);
+    setPhoto(null);
+    setPhotoURL(null);
+    setPhotoMetadata(null);
+    if (fileRef.current) {
+      fileRef.current.value = "";
     }
   };
 

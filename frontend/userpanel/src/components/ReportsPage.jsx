@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Calendar,
   MapPin,
@@ -6,101 +6,68 @@ import {
   CheckCircle,
   AlertCircle,
   Eye,
+  RefreshCw,
+  Filter,
 } from "lucide-react";
+import { reportAPI } from "../services/api";
 
 function ReportsPage() {
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [selectedReport, setSelectedReport] = useState(null);
+  const [reports, setReports] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Pilot data with realistic Indian civic issues
-  const pilotReports = [
-    {
-      id: 1,
-      ticketNumber: "CVE-240920-001",
-      title: "Broken Street Light on Brigade Road",
-      category: "streetlight",
-      categoryIcon: "💡",
-      status: "resolved",
-      priority: "medium",
-      location: "Brigade Road, Near Forum Mall, Bengaluru",
-      coordinates: "12.9716° N, 77.5946° E",
-      submittedDate: "2024-09-18T14:30:00",
-      resolvedDate: "2024-09-20T09:15:00",
-      description:
-        "Street light pole #BRG-401 has been non-functional for 3 days causing safety concerns during night hours.",
-      department: "BESCOM",
-      resolutionTime: "1.8 days",
-      reportedBy: "citizen@civiceye.com",
-    },
-    {
-      id: 2,
-      ticketNumber: "CVE-240919-002",
-      title: "Garbage Overflow Near HSR Layout",
-      category: "garbage",
-      categoryIcon: "🗑️",
-      status: "in-progress",
-      priority: "high",
-      location: "27th Main Road, HSR Layout Sector 1",
-      coordinates: "12.9081° N, 77.6476° E",
-      submittedDate: "2024-09-19T08:45:00",
-      estimatedResolution: "2024-09-21T17:00:00",
-      description:
-        "Large garbage accumulation blocking pedestrian walkway. Immediate attention required due to health hazards.",
-      department: "BBMP Waste Management",
-      reportedBy: "resident@civiceye.com",
-    },
-    {
-      id: 3,
-      ticketNumber: "CVE-240917-003",
-      title: "Pothole on Outer Ring Road",
-      category: "pothole",
-      categoryIcon: "🕳️",
-      status: "pending",
-      priority: "high",
-      location: "Outer Ring Road, Near Marathahalli Bridge",
-      coordinates: "12.9591° N, 77.6974° E",
-      submittedDate: "2024-09-17T16:20:00",
-      description:
-        "Deep pothole causing traffic congestion and vehicle damage. Approximately 2 feet wide and 8 inches deep.",
-      department: "BBMP Roads",
-      reportedBy: "commuter@civiceye.com",
-    },
-    {
-      id: 4,
-      ticketNumber: "CVE-240916-004",
-      title: "Water Supply Disruption in Koramangala",
-      category: "water",
-      categoryIcon: "💧",
-      status: "resolved",
-      priority: "high",
-      location: "5th Block, Koramangala, Near Sony World Signal",
-      coordinates: "12.9352° N, 77.6245° E",
-      submittedDate: "2024-09-16T07:30:00",
-      resolvedDate: "2024-09-16T18:45:00",
-      description:
-        "Complete water supply cut-off affecting 200+ households. Emergency restoration needed.",
-      department: "BWSSB",
-      resolutionTime: "11.25 hours",
-      reportedBy: "society@civiceye.com",
-    },
-    {
-      id: 5,
-      ticketNumber: "CVE-240915-005",
-      title: "Traffic Signal Malfunction at Silk Board",
-      category: "traffic",
-      categoryIcon: "🚦",
-      status: "in-progress",
-      priority: "critical",
-      location: "Silk Board Junction, Hosur Road",
-      coordinates: "12.9116° N, 77.6229° E",
-      submittedDate: "2024-09-15T11:15:00",
-      estimatedResolution: "2024-09-21T14:00:00",
-      description:
-        "Main traffic signal not functioning during peak hours causing major traffic jams.",
-      department: "Bengaluru Traffic Police",
-      reportedBy: "traffic@civiceye.com",
-    },
-  ];
+  // Fetch reports from backend
+  useEffect(() => {
+    fetchReports();
+  }, []);
+
+  const fetchReports = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await reportAPI.getAllReports();
+
+      if (response.data.success) {
+        setReports(response.data.reports || []);
+      } else {
+        throw new Error(response.data.message || "Failed to fetch reports");
+      }
+    } catch (error) {
+      console.error("Error fetching reports:", error);
+      setError(error.message);
+
+      // Fallback to pilot data if backend fails
+      const fallbackReports = [
+        {
+          _id: "1",
+          ticketNumber: "CVE-240920-001",
+          title: "Broken Street Light on Brigade Road",
+          issueType: "streetlight",
+          status: "resolved",
+          priority: "medium",
+          location: "Brigade Road, Near Forum Mall, Bengaluru",
+          coordinates: { latitude: 12.9716, longitude: 77.5946 },
+          description:
+            "Street light pole #BRG-401 has been non-functional for 3 days causing safety concerns during night hours.",
+          submittedAt: "2024-09-18T14:30:00Z",
+          resolvedAt: "2024-09-20T09:15:00Z",
+          department: "BESCOM",
+          submittedBy: { name: "Citizen", email: "citizen@civiceye.com" },
+        },
+        // Add more fallback data...
+      ];
+      setReports(fallbackReports);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRefresh = () => {
+    fetchReports();
+  };
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -128,50 +95,39 @@ function ReportsPage() {
     }
   };
 
-  const getPriorityColor = (priority) => {
-    switch (priority) {
-      case "critical":
-        return "#dc2626";
-      case "high":
-        return "#ea580c";
-      case "medium":
-        return "#d97706";
-      case "low":
-        return "#65a30d";
-      default:
-        return "#6b7280";
-    }
+  const getCategoryIcon = (issueType) => {
+    const icons = {
+      streetlight: "💡",
+      garbage: "🗑️",
+      pothole: "🕳️",
+      water: "💧",
+      traffic: "🚦",
+      drainage: "🌊",
+      construction: "🏗️",
+      parks: "🌳",
+    };
+    return icons[issueType] || "📋";
   };
 
-  const filteredReports = pilotReports.filter((report) => {
+  const filteredReports = reports.filter((report) => {
     if (selectedFilter === "all") return true;
     return report.status === selectedFilter;
   });
 
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString("en-IN", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
-  const calculateTimeAgo = (dateString) => {
-    const now = new Date();
-    const reportDate = new Date(dateString);
-    const diffTime = Math.abs(now - reportDate);
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
-    if (diffDays === 0) return "Today";
-    if (diffDays === 1) return "Yesterday";
-    return `${diffDays} days ago`;
-  };
+  if (loading) {
+    return (
+      <div className="civic-page">
+        <div className="civic-loading-container">
+          <div className="civic-spinner"></div>
+          <p>Loading community reports...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="civic-page">
-      {/* Header */}
+      {/* Header with Refresh */}
       <div className="civic-page-header">
         <div className="civic-reports-header-content">
           <div>
@@ -180,22 +136,40 @@ function ReportsPage() {
               Track and monitor civic issues in your area
             </p>
           </div>
-          <div className="civic-reports-stats">
-            <div className="civic-mini-stat">
-              <span className="civic-mini-stat-number">
-                {pilotReports.length}
-              </span>
-              <span className="civic-mini-stat-label">Total</span>
-            </div>
-            <div className="civic-mini-stat">
-              <span className="civic-mini-stat-number">
-                {pilotReports.filter((r) => r.status === "resolved").length}
-              </span>
-              <span className="civic-mini-stat-label">Resolved</span>
+          <div className="civic-reports-actions">
+            <button
+              onClick={handleRefresh}
+              className="civic-refresh-button"
+              disabled={loading}
+            >
+              <RefreshCw size={16} />
+              Refresh
+            </button>
+            <div className="civic-reports-stats">
+              <div className="civic-mini-stat">
+                <span className="civic-mini-stat-number">{reports.length}</span>
+                <span className="civic-mini-stat-label">Total</span>
+              </div>
+              <div className="civic-mini-stat">
+                <span className="civic-mini-stat-number">
+                  {reports.filter((r) => r.status === "resolved").length}
+                </span>
+                <span className="civic-mini-stat-label">Resolved</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Error Message */}
+      {error && (
+        <div className="civic-section">
+          <div className="civic-error-banner">
+            <AlertCircle size={16} />
+            <span>Using offline data. Check your connection and refresh.</span>
+          </div>
+        </div>
+      )}
 
       {/* Filter Tabs */}
       <div className="civic-section">
@@ -215,8 +189,8 @@ function ReportsPage() {
                 : filter.charAt(0).toUpperCase() + filter.slice(1)}
               <span className="civic-filter-count">
                 {filter === "all"
-                  ? pilotReports.length
-                  : pilotReports.filter((r) => r.status === filter).length}
+                  ? reports.length
+                  : reports.filter((r) => r.status === filter).length}
               </span>
             </button>
           ))}
@@ -226,69 +200,77 @@ function ReportsPage() {
       {/* Reports List */}
       <div className="civic-section">
         <div className="civic-reports-list">
-          {filteredReports.map((report) => (
-            <div
-              key={report.id}
-              className="civic-report-card"
-              onClick={() => setSelectedReport(report)}
-            >
-              <div className="civic-report-card-header">
-                <div className="civic-report-card-title-area">
-                  <div className="civic-report-category-badge">
-                    <span className="civic-report-category-icon">
-                      {report.categoryIcon}
-                    </span>
-                    <span className="civic-report-category-text">
-                      {report.category}
-                    </span>
-                  </div>
-                  <div
-                    className="civic-report-status-badge"
-                    style={{ backgroundColor: getStatusColor(report.status) }}
-                  >
-                    {getStatusIcon(report.status)}
-                    <span>{report.status.replace("-", " ")}</span>
-                  </div>
-                </div>
-                <div
-                  className="civic-report-priority-badge"
-                  style={{ backgroundColor: getPriorityColor(report.priority) }}
-                >
-                  {report.priority}
-                </div>
-              </div>
-
-              <div className="civic-report-card-content">
-                <h3 className="civic-report-card-title">{report.title}</h3>
-                <p className="civic-report-card-description">
-                  {report.description}
-                </p>
-
-                <div className="civic-report-card-meta">
-                  <div className="civic-report-meta-item">
-                    <MapPin size={12} />
-                    <span>{report.location}</span>
-                  </div>
-                  <div className="civic-report-meta-item">
-                    <Calendar size={12} />
-                    <span>{calculateTimeAgo(report.submittedDate)}</span>
-                  </div>
-                </div>
-
-                <div className="civic-report-card-footer">
-                  <div className="civic-report-ticket">
-                    <span className="civic-report-ticket-label">Ticket:</span>
-                    <span className="civic-report-ticket-number">
-                      {report.ticketNumber}
-                    </span>
-                  </div>
-                  <div className="civic-report-department">
-                    {report.department}
-                  </div>
-                </div>
-              </div>
+          {filteredReports.length === 0 ? (
+            <div className="civic-empty-state">
+              <div className="civic-empty-icon">📋</div>
+              <h3>No reports found</h3>
+              <p>No reports match your current filter criteria.</p>
             </div>
-          ))}
+          ) : (
+            filteredReports.map((report) => (
+              <div
+                key={report._id || report.id}
+                className="civic-report-card"
+                onClick={() => setSelectedReport(report)}
+              >
+                <div className="civic-report-card-header">
+                  <div className="civic-report-card-title-area">
+                    <div className="civic-report-category-badge">
+                      <span className="civic-report-category-icon">
+                        {getCategoryIcon(report.issueType)}
+                      </span>
+                      <span className="civic-report-category-text">
+                        {report.issueType}
+                      </span>
+                    </div>
+                    <div
+                      className="civic-report-status-badge"
+                      style={{ backgroundColor: getStatusColor(report.status) }}
+                    >
+                      {getStatusIcon(report.status)}
+                      <span>{report.status.replace("-", " ")}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="civic-report-card-content">
+                  <h3 className="civic-report-card-title">
+                    {report.title || `${report.issueType} Issue`}
+                  </h3>
+                  <p className="civic-report-card-description">
+                    {report.description}
+                  </p>
+
+                  <div className="civic-report-card-meta">
+                    <div className="civic-report-meta-item">
+                      <MapPin size={12} />
+                      <span>{report.location || "Location not available"}</span>
+                    </div>
+                    <div className="civic-report-meta-item">
+                      <Calendar size={12} />
+                      <span>
+                        {new Date(report.submittedAt).toLocaleDateString(
+                          "en-IN"
+                        )}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="civic-report-card-footer">
+                    <div className="civic-report-ticket">
+                      <span className="civic-report-ticket-label">Ticket:</span>
+                      <span className="civic-report-ticket-number">
+                        {report.ticketNumber || report._id?.slice(-6)}
+                      </span>
+                    </div>
+                    <div className="civic-report-department">
+                      {report.department || "Municipal Corp"}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
 
@@ -303,7 +285,9 @@ function ReportsPage() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="civic-modal-header">
-              <h2 className="civic-modal-title">{selectedReport.title}</h2>
+              <h2 className="civic-modal-title">
+                {selectedReport.title || `${selectedReport.issueType} Issue`}
+              </h2>
               <button
                 className="civic-modal-close"
                 onClick={() => setSelectedReport(null)}
@@ -315,8 +299,8 @@ function ReportsPage() {
             <div className="civic-modal-body">
               <div className="civic-modal-badges">
                 <div className="civic-modal-category-badge">
-                  <span>{selectedReport.categoryIcon}</span>
-                  <span>{selectedReport.category}</span>
+                  <span>{getCategoryIcon(selectedReport.issueType)}</span>
+                  <span>{selectedReport.issueType}</span>
                 </div>
                 <div
                   className="civic-modal-status-badge"
@@ -336,49 +320,66 @@ function ReportsPage() {
                     {selectedReport.description}
                   </span>
                 </div>
+
                 <div className="civic-modal-detail-item">
                   <span className="civic-modal-detail-label">Location:</span>
                   <span className="civic-modal-detail-value">
-                    {selectedReport.location}
+                    {selectedReport.location || "Location not provided"}
                   </span>
                 </div>
-                <div className="civic-modal-detail-item">
-                  <span className="civic-modal-detail-label">Coordinates:</span>
-                  <span className="civic-modal-detail-value">
-                    {selectedReport.coordinates}
-                  </span>
-                </div>
-                <div className="civic-modal-detail-item">
-                  <span className="civic-modal-detail-label">Department:</span>
-                  <span className="civic-modal-detail-value">
-                    {selectedReport.department}
-                  </span>
-                </div>
+
+                {selectedReport.coordinates && (
+                  <div className="civic-modal-detail-item">
+                    <span className="civic-modal-detail-label">
+                      Coordinates:
+                    </span>
+                    <span className="civic-modal-detail-value">
+                      {selectedReport.coordinates.latitude?.toFixed(6)},{" "}
+                      {selectedReport.coordinates.longitude?.toFixed(6)}
+                    </span>
+                  </div>
+                )}
+
                 <div className="civic-modal-detail-item">
                   <span className="civic-modal-detail-label">Submitted:</span>
                   <span className="civic-modal-detail-value">
-                    {formatDate(selectedReport.submittedDate)}
+                    {new Date(selectedReport.submittedAt).toLocaleString(
+                      "en-IN"
+                    )}
                   </span>
                 </div>
-                {selectedReport.resolvedDate && (
+
+                {selectedReport.resolvedAt && (
                   <div className="civic-modal-detail-item">
                     <span className="civic-modal-detail-label">Resolved:</span>
                     <span className="civic-modal-detail-value">
-                      {formatDate(selectedReport.resolvedDate)}
+                      {new Date(selectedReport.resolvedAt).toLocaleString(
+                        "en-IN"
+                      )}
                     </span>
                   </div>
                 )}
-                {selectedReport.resolutionTime && (
-                  <div className="civic-modal-detail-item">
-                    <span className="civic-modal-detail-label">
-                      Resolution Time:
-                    </span>
-                    <span className="civic-modal-detail-value">
-                      {selectedReport.resolutionTime}
-                    </span>
-                  </div>
-                )}
+
+                <div className="civic-modal-detail-item">
+                  <span className="civic-modal-detail-label">Ticket ID:</span>
+                  <span className="civic-modal-detail-value">
+                    {selectedReport.ticketNumber || selectedReport._id}
+                  </span>
+                </div>
               </div>
+
+              {selectedReport.photo && (
+                <div className="civic-modal-photo">
+                  <span className="civic-modal-detail-label">
+                    Evidence Photo:
+                  </span>
+                  <img
+                    src={selectedReport.photo}
+                    alt="Report evidence"
+                    className="civic-modal-photo-img"
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>

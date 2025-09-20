@@ -1877,7 +1877,7 @@ body {
 
 /* Add these after line 1820 (after the existing Android fixes) */
 
-/* Comprehensive Android Scrolling Fixes */
+/* Comprehensive Android Scrolling Fixs */
 @media screen and (max-width: 768px) {
 
   /* Force proper scrolling for all Android browsers */
@@ -2196,6 +2196,7 @@ body {
   margin: 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -2796,337 +2797,222 @@ body {
 
 .civic-achievement-card {
   background: var(--secondary-white);
-  border-radius: 16px;
+  border-radius: 12px;
   padding: 20px;
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
   border: 1px solid var(--border-light);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 16px;
   transition: all 0.2s ease;
 }
 
-.civic-achievement-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  border-color: var(--accent-saffron);
+.civic-achievement-card.earned {
+  border-color: var(--success-green);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(16, 185, 129, 0.1));
+}
+
+.civic-achievement-card.locked {
+  opacity: 0.6;
+  background: var(--background-light);
 }
 
 .civic-achievement-icon {
-  font-size: 40px;
-  line-height: 1;
+  font-size: 32px;
   flex-shrink: 0;
 }
 
 .civic-achievement-content {
   flex: 1;
-  min-width: 0;
 }
 
 .civic-achievement-title {
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--text-dark);
   margin: 0 0 4px 0;
-  line-height: 1.3;
 }
 
 .civic-achievement-description {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-light);
-  line-height: 1.4;
   margin: 0 0 8px 0;
 }
 
-.civic-achievement-meta {
+.civic-achievement-earned {
+  font-size: 12px;
+  color: var(--success-green);
+  font-weight: 500;
+}
+
+/* =================================================================
+   LOADING AND ERROR STATES
+   ================================================================= */
+
+.civic-loading-container {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
 }
 
-.civic-achievement-date {
-  font-size: 11px;
+.civic-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--border-light);
+  border-top: 4px solid var(--primary-blue);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+.civic-loading-text {
   color: var(--text-light);
+  font-size: 14px;
+  margin: 0;
 }
 
-.civic-achievement-points {
-  background: var(--accent-saffron);
-  color: white;
-  padding: 2px 6px;
-  border-radius: 8px;
-  font-size: 10px;
+/* Error States */
+.civic-error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.civic-error-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.civic-error-title {
+  color: var(--text-dark);
+  font-size: 20px;
   font-weight: 600;
+  margin: 0 0 8px 0;
 }
 
-/* =================================================================
-   MOBILE RESPONSIVENESS FOR NEW COMPONENTS
-   ================================================================= */
-
-@media (max-width: 768px) {
-  .civic-reports-header-content {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-  }
-
-  .civic-reports-stats {
-    justify-content: center;
-  }
-
-  .civic-profile-banner {
-    flex-direction: column;
-    gap: 16px;
-    text-align: center;
-  }
-
-  .civic-profile-main-info {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    min-width: auto;
-  }
-
-  .civic-profile-quick-stats {
-    justify-content: center;
-  }
-
-  .civic-impact-grid {
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 12px;
-  }
-
-  .civic-achievements-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .civic-modal-content {
-    margin: 10px;
-    max-height: calc(100vh - 40px);
-  }
+.civic-error-message {
+  color: var(--text-light);
+  font-size: 14px;
+  margin: 0 0 24px 0;
 }
 
-@media (max-width: 480px) {
-  .civic-filter-tabs {
-    gap: 6px;
-  }
-
-  .civic-filter-tab {
-    padding: 6px 12px;
-    font-size: 12px;
-  }
-
-  .civic-report-card {
-    padding: 12px;
-  }
-
-  .civic-profile-tabs {
-    padding: 0 12px;
-  }
-
-  .civic-profile-tab {
-    padding: 8px 16px;
-    font-size: 13px;
-  }
-
-  .civic-impact-card {
-    padding: 12px;
-  }
-
-  .civic-achievement-card {
-    padding: 16px;
-  }
-
-  .civic-modal-header {
-    padding: 16px;
-  }
-
-  .civic-modal-body {
-    padding: 12px 16px 16px;
-  }
+.civic-retry-button {
+  background: var(--primary-blue);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
 }
 
-/* Ultimate Android Scrolling Fix */
-@media screen and (max-width: 768px) and (orientation: portrait) {
-  * {
-    -webkit-overflow-scrolling: touch !important;
-  }
-
-  html,
-  body {
-    touch-action: manipulation !important;
-    -webkit-text-size-adjust: 100% !important;
-    -webkit-font-smoothing: antialiased !important;
-  }
-
-  .civic-main-content,
-  .civic-form-container {
-    /* Absolute positioning can fix Android scrolling issues */
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 90px !important;
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-    -webkit-overflow-scrolling: touch !important;
-    transform: translateZ(0) !important;
-    -webkit-transform: translateZ(0) !important;
-  }
-
-  .civic-report-form .civic-form-container {
-    bottom: 0 !important;
-    top: 70px !important;
-  }
+.civic-retry-button:hover {
+  background: var(--primary-blue-dark);
+  transform: translateY(-1px);
 }
 
-/* Force scroll for problematic Android browsers */
-@media screen and (max-width: 768px) {
-
-  .civic-page,
-  .civic-main-content,
-  .civic-form-container {
-    /* Last resort - force scroll with momentum */
-    overflow-y: scroll !important;
-    -webkit-overflow-scrolling: touch !important;
-    scroll-behavior: auto !important;
-    overscroll-behavior: auto !important;
-    /* Hardware acceleration */
-    transform: translate3d(0, 0, 0) !important;
-    -webkit-transform: translate3d(0, 0, 0) !important;
-    will-change: transform !important;
-    contain: layout style paint !important;
-  }
+/* Empty States */
+.civic-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
 }
 
-/* Prevent zoom on double tap for Android */
-@media screen and (max-width: 768px) {
-  * {
-    touch-action: manipulation !important;
-  }
-
-  input,
-  textarea,
-  select {
-    touch-action: manipulation !important;
-    -webkit-user-select: text !important;
-    user-select: text !important;
-  }
+.civic-empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.6;
 }
 
-/* Final Android compatibility layer */
-@supports not (-webkit-touch-callout: none) {
-
-  /* Non-iOS devices (mainly Android) */
-  .civic-main-content,
-  .civic-form-container,
-  .civic-page {
-    overflow-y: scroll !important;
-    -webkit-overflow-scrolling: auto !important;
-    scroll-behavior: auto !important;
-    height: auto !important;
-    min-height: calc(100vh - 90px) !important;
-    max-height: none !important;
-  }
+.civic-empty-title {
+  color: var(--text-dark);
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
 }
 
-/* =================================================================
-   ULTIMATE MOBILE SCROLLING FIX - OVERRIDE ALL
-   ================================================================= */
-
-/* Force proper mobile behavior */
-@media screen and (max-width: 768px) {
-  html {
-    height: 100% !important;
-    overflow: hidden !important;
-    position: fixed !important;
-    width: 100% !important;
-  }
-
-  body {
-    height: 100% !important;
-    overflow: hidden !important;
-    position: fixed !important;
-    width: 100% !important;
-    -webkit-overflow-scrolling: touch !important;
-  }
-
-  #root {
-    height: 100vh !important;
-    overflow: hidden !important;
-    position: relative !important;
-    width: 100% !important;
-  }
-
-  .civic-app {
-    height: 100vh !important;
-    overflow: hidden !important;
-    position: relative !important;
-    width: 100% !important;
-    display: flex !important;
-    flex-direction: column !important;
-  }
-
-  .civic-main-content {
-    flex: 1 !important;
-    height: calc(100vh - 90px) !important;
-    overflow-y: scroll !important;
-    overflow-x: hidden !important;
-    -webkit-overflow-scrolling: touch !important;
-    position: relative !important;
-    width: 100% !important;
-  }
-
-  .civic-page {
-    width: 100% !important;
-    min-height: 100% !important;
-    padding-bottom: 100px !important;
-    position: relative !important;
-  }
-
-  /* Report Form Fix */
-  .civic-report-form {
-    height: 100vh !important;
-    overflow: hidden !important;
-    display: flex !important;
-    flex-direction: column !important;
-  }
-
-  .civic-form-container {
-    flex: 1 !important;
-    height: calc(100vh - 80px) !important;
-    overflow-y: scroll !important;
-    overflow-x: hidden !important;
-    -webkit-overflow-scrolling: touch !important;
-    padding: 16px !important;
-  }
+.civic-empty-message {
+  color: var(--text-light);
+  font-size: 14px;
+  margin: 0;
+  max-width: 300px;
 }
 
-/* Navigation fix */
-.civic-nav {
-  position: fixed !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  height: 90px !important;
-  background: var(--secondary-white) !important;
-  border-top: 1px solid var(--border-light) !important;
-  padding: 8px 12px !important;
-  display: flex !important;
-  justify-content: space-around !important;
-  z-index: 100 !important;
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1) !important;
+/* Achievements Grid */
+.civic-achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
 }
 
-/* Horizontal scrolling categories - keep existing */
-.civic-categories-scroll-track,
-.civic-issue-types-scroll-track {
-  overflow-x: auto !important;
-  overflow-y: hidden !important;
-  -webkit-overflow-scrolling: touch !important;
-  display: flex !important;
-  gap: 12px !important;
-  padding: 8px 0 12px 0 !important;
+.civic-achievement-card {
+  background: var(--secondary-white);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.2s ease;
 }
 
+.civic-achievement-card.earned {
+  border-color: var(--success-green);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(16, 185, 129, 0.1));
+}
+
+.civic-achievement-card.locked {
+  opacity: 0.6;
+  background: var(--background-light);
+}
+
+.civic-achievement-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.civic-achievement-content {
+  flex: 1;
+}
+
+.civic-achievement-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0 0 4px 0;
+}
+
+.civic-achievement-description {
+  font-size: 14px;
+  color: var(--text-light);
+  margin: 0 0 8px 0;
+}
+
+.civic-achievement-earned {
+  font-size: 12px;
+  color: var(--success-green);
+  font-weight: 500;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
