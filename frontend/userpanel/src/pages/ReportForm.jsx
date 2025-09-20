@@ -91,7 +91,7 @@ function ReportForm() {
         form.append("longitude", lng);
       }
 
-      await axios.post("http://localhost:5000/report/submit", form, {
+      await axios.post("http://localhost:3000/api/reports/submit", form, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

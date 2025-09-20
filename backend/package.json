@@ -1,0 +1,47 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "CivicEye Backend API - Smart Civic Issue Reporting Platform",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "npm run test:unit && npm run test:integration",
+    "test:unit": "echo \"Unit tests not implemented yet\"",
+    "test:integration": "echo \"Integration tests not implemented yet\"",
+    "lint": "echo \"Linting not configured\"",
+    "logs": "tail -f logs/*.log"
+  },
+  "keywords": [
+    "civic",
+    "reporting",
+    "government",
+    "api",
+    "smart-city",
+    "hackathon"
+  ],
+  "author": "CivicEye Team",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cloudinary": "^2.7.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "firebase-admin": "^13.5.0",
+    "geolib": "^3.3.4",
+    "joi": "^18.0.1",
+    "multer": "^2.0.2",
+    "node-cron": "^4.2.1",
+    "nodemailer": "^7.0.6",
+    "resend": "^6.1.0",
+    "uuid": "^7.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  }
+}

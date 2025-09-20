@@ -1,194 +1,3132 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* CSS Reset and Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-/* ---------- GOV-THEME CUSTOM CLASSES ---------- */
+html {
+  height: 100%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Mobile specific */
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
 
-/* page background */
 body {
-  @apply min-h-screen;
-  background: linear-gradient(135deg, #ec4899, #8b5cf6); /* pink to purple */
-  background-size: 200% 200%;
-  animation: bgGradient 8s ease infinite;
+  height: 100%;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  color: #1f2937;
+  line-height: 1.6;
+  /* Mobile specific */
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
 }
 
-/* animate background gradient */
-@keyframes bgGradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+#root {
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
 }
 
-/* card / container */
-.gov-card {
-  @apply bg-white shadow-xl rounded-3xl p-6 sm:p-10 w-full max-w-2xl mx-auto transition-all duration-200;
-  border: 2px solid black; /* black highlight */
-  animation: fadeIn 0.5s ease forwards;
-/* card / container */
-.gov-card {
-  @apply bg-gradient-to-br from-white to-slate-50 shadow-xl rounded-3xl p-6 sm:p-10 w-full max-w-2xl mx-auto border border-slate-100;
+/* CSS Variables for Blue & White Theme with Saffron Accents */
+:root {
+  --primary-blue: #3b82f6;
+  --primary-blue-dark: #1e40af;
+  --primary-blue-light: #dbeafe;
+  --secondary-white: #ffffff;
+  --accent-saffron: #f59e0b;
+  --accent-saffron-light: #fef3c7;
+  --text-dark: #1f2937;
+  --text-light: #6b7280;
+  --border-light: #e5e7eb;
+  --success-green: #10b981;
+  --error-red: #ef4444;
+  --background-light: #f8fafc;
 }
 
-/* hero heading and tagline */
-.gov-hero {
-  @apply text-center mb-4;
-}
-.gov-title {
-  @apply text-2xl sm:text-3xl font-extrabold tracking-tight;
-  color: rgb(12, 74, 110); /* deep indigo-ish for trust */
-}
-.gov-tag {
-  @apply mt-1 text-sm sm:text-base font-medium;
-  color: rgb(34,197,94); /* green accent */
-  animation: slideUp 0.6s ease forwards;
+/* =================================================================
+   MAIN APP LAYOUT - FIXED SCROLLING
+   ================================================================= */
+
+.civic-app {
+  height: 100vh;
+  width: 100%;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Inter', sans-serif;
+  position: relative;
+  overflow: hidden;
 }
 
-/* little badge strip */
-.gov-badge {
-  @apply inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold shadow-sm;
-  background: linear-gradient(90deg, rgba(255, 153, 51, 0.12), rgba(34,197,94,0.06));
-  color: rgb(133,77,14); /* subdued saffron text */
+.civic-main-content {
+  flex: 1;
+  height: calc(100vh - 90px);
+  width: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
 }
 
-/* form groups */
-.gov-field {
-  @apply w-full;
+.civic-page {
+  width: 100%;
+  min-height: 100%;
+  padding-bottom: 100px;
+  position: relative;
 }
 
-/* textarea / inputs */
-.gov-input {
-  @apply w-full rounded-lg border border-slate-200 px-4 py-3 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 transition-shadow duration-200;
-  background-color: white;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+/* =================================================================
+   NAVIGATION - BLUE & WHITE DESIGN
+   ================================================================= */
+
+.civic-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--secondary-white);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border-light);
+  padding: 8px 12px;
+  display: flex;
+  justify-content: space-around;
+  z-index: 100;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* upload area as a styled label (file input hidden) */
-.gov-file {
-  @apply w-full rounded-lg border-dashed border-2 border-purple-200 p-4 flex items-center justify-between gap-4 cursor-pointer transition-all duration-200 hover:border-purple-300;
-  background-color: rgba(139, 92, 246, 0.02);
-}
-.gov-file:hover {
-  transform: translateY(-3px);
-  background-color: rgba(139, 92, 246, 0.05);
-  @apply w-full rounded-lg border-dashed border-2 border-slate-200 p-4 flex items-center justify-between gap-4 cursor-pointer transition-all duration-200 hover:border-indigo-300;
-  background-color: rgba(59,130,246,0.02);
-}
-.gov-file:hover {
-  transform: translateY(-3px);
+.civic-nav-item {
+  background: none;
+  border: none;
+  color: var(--text-light);
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 60px;
+  font-size: 12px;
+  font-weight: 500;
 }
 
-/* styled "Upload" button inside label */
-.gov-file-btn {
-  @apply inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium shadow-sm transition transform;
-  background: linear-gradient(90deg,#ff9900,#f97316);
-  background: linear-gradient(90deg,#ff9900,#f97316); /* saffron gradient */
+.civic-nav-item:hover {
+  background: var(--primary-blue-light);
+  color: var(--primary-blue);
+}
+
+.civic-nav-item.active {
+  color: var(--primary-blue);
+  background: var(--primary-blue-light);
+}
+
+.civic-nav-item span {
+  font-size: 11px;
+  line-height: 1;
+}
+
+/* =================================================================
+   HOMEPAGE - BLUE & WHITE WITH SAFFRON ACCENTS
+   ================================================================= */
+
+.civic-page {
+  flex: 1;
+  padding-bottom: 90px !important;
+  min-height: calc(100vh - 90px) !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+/* Homepage Header */
+.civic-header-home {
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
   color: white;
+  padding: 20px;
+  margin: 16px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
-/* file info text */
-.gov-file-info {
-  @apply text-xs text-slate-600;
+.civic-header-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 200px;
 }
 
-/* preview image */
-.gov-preview {
-  @apply mt-3 rounded-md border border-slate-100 max-h-40 object-cover;
+.civic-header-icon {
+  font-size: 32px;
+  line-height: 1;
 }
 
-/* location / small controls */
-.gov-controls {
-  @apply flex items-center gap-3;
+.civic-header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
-.gov-loc-btn {
-  @apply inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition;
-  background: linear-gradient(90deg,#06b6d4,#3b82f6);
+
+.civic-header-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.civic-header-subtitle {
+  font-size: 12px;
+  opacity: 0.9;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.civic-report-button {
+  background: var(--accent-saffron);
   color: white;
-  box-shadow: 0 6px 18px rgba(59,130,246,0.12);
+  border: none;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
-/* copy coords button */
-.gov-copy {
-  @apply inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition;
-  background: linear-gradient(90deg,#10b981,#3b82f6);
+.civic-report-button:hover {
+  background: #d97706;
+  transform: translateY(-1px);
+}
+
+/* Homepage Sections */
+.civic-section {
+  margin: 16px 16px 24px 16px;
+}
+
+.civic-section-header {
+  margin-bottom: 12px;
+}
+
+.civic-section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0 0 4px 0;
+  line-height: 1.3;
+}
+
+.civic-section-subtitle {
+  font-size: 12px;
+  color: var(--text-light);
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* =================================================================
+   PERFECT SCROLLABLE CATEGORIES - MOBILE OPTIMIZED
+   ================================================================= */
+
+.civic-categories-scroll-container {
+  width: 100% !important;
+  overflow: hidden !important;
+  position: relative !important;
+}
+
+.civic-scroll-help {
+  font-size: 11px !important;
+  color: #9ca3af !important;
+  margin: 0 0 8px 0 !important;
+  text-align: center !important;
+  font-style: italic !important;
+  animation: pulse-hint 3s ease-in-out infinite !important;
+}
+
+.civic-categories-scroll-track {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 12px !important;
+  padding: 8px 0 12px 0 !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  scroll-behavior: smooth !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+  touch-action: pan-x !important;
+  position: relative !important;
+  min-width: 100% !important;
+  width: auto !important;
+  transform: translateZ(0) !important;
+  -webkit-transform: translateZ(0) !important;
+  will-change: transform !important;
+}
+
+.civic-categories-scroll-track::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.civic-category-scroll-card {
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+  min-width: 120px !important;
+  max-width: 130px !important;
+  width: 120px !important;
+  background: var(--secondary-white);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 14px 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-height: 80px;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transform: translateZ(0) !important;
+  -webkit-transform: translateZ(0) !important;
+  will-change: transform !important;
+}
+
+.civic-category-scroll-card:hover {
+  background: var(--primary-blue-light);
+  border-color: var(--primary-blue);
+  transform: translateY(-2px) translateZ(0);
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.15);
+}
+
+.civic-category-scroll-card:active {
+  transform: translateY(0) translateZ(0);
+}
+
+.civic-category-scroll-icon {
+  font-size: 24px;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.civic-category-scroll-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.civic-category-scroll-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-dark);
+  line-height: 1.2;
+  text-align: center;
+}
+
+.civic-category-scroll-desc {
+  font-size: 10px;
+  color: var(--text-light);
+  line-height: 1.1;
+  text-align: center;
+}
+
+.civic-scroll-indicator {
+  display: flex !important;
+  justify-content: center !important;
+  margin-top: 6px !important;
+}
+
+.civic-scroll-hint {
+  font-size: 10px !important;
+  color: #9ca3af !important;
+  background: rgba(255, 255, 255, 0.7) !important;
+  padding: 3px 10px !important;
+  border-radius: 10px !important;
+  animation: pulse-hint 2s ease-in-out infinite !important;
+}
+
+/* City Progress Stats */
+.civic-stats-grid {
+  background: var(--secondary-white);
+  border-radius: 16px;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-light);
+}
+
+.civic-stat-card {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.civic-stat-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.civic-stat-number {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--primary-blue);
+  line-height: 1;
+}
+
+.civic-stat-label {
+  font-size: 11px;
+  color: var(--text-light);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* Empty States */
+.civic-empty-state {
+  background: var(--secondary-white);
+  border-radius: 12px;
+  padding: 32px 20px;
+  text-align: center;
+  border: 1px solid var(--border-light);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.civic-empty-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+  line-height: 1;
+  opacity: 0.5;
+}
+
+.civic-empty-text {
+  color: var(--text-light);
+  font-size: 14px;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* =================================================================
+   PROFILE PAGE - BLUE & WHITE DESIGN
+   ================================================================= */
+
+.civic-profile-header {
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
   color: white;
-  box-shadow: 0 6px 18px rgba(59,130,246,0.12);
+  padding: 24px 20px;
+  margin: 16px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
 }
 
-/* flash green when copied */
-@keyframes flashSuccess {
-  0% { background: #22c55e; }
-  100% { background: linear-gradient(90deg,#10b981,#3b82f6); }
+.civic-profile-info {
+  flex: 1;
 }
-.gov-copy.success {
-  animation: flashSuccess 0.8s ease;
-  background: linear-gradient(90deg,#06b6d4,#3b82f6); /* teal to blue */
+
+.civic-profile-greeting {
+  font-size: 14px;
+  opacity: 0.9;
+  margin: 0 0 4px 0;
+  font-weight: 400;
+}
+
+.civic-profile-name {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.civic-profile-avatar {
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  backdrop-filter: blur(10px);
+}
+
+.civic-avatar-placeholder {
+  opacity: 0.8;
+}
+
+.civic-impact-stats {
+  background: var(--secondary-white);
+  border-radius: 16px;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-light);
+}
+
+.civic-impact-stat {
+  text-align: center;
+}
+
+.civic-impact-number {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary-blue);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.civic-impact-label {
+  font-size: 12px;
+  color: var(--text-light);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* =================================================================
+   REPORTS PAGE - BLUE & WHITE DESIGN
+   ================================================================= */
+
+.civic-page-header {
+  background: var(--secondary-white);
+  padding: 24px 20px;
+  margin: 16px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-light);
+}
+
+.civic-page-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0 0 4px 0;
+  line-height: 1.2;
+}
+
+.civic-page-subtitle {
+  font-size: 14px;
+  color: var(--text-light);
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* =================================================================
+   REPORT FORM - BLUE & WHITE WITH SAFFRON ACCENTS
+   ================================================================= */
+
+.civic-report-form {
+  min-height: 100vh;
+  max-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Inter', sans-serif;
+  position: relative;
+  overflow: hidden !important;
+}
+
+/* Report Form Header */
+.civic-form-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--secondary-white);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-light);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+}
+
+.civic-back-button {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: var(--background-light);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.civic-back-button:hover {
+  background: var(--primary-blue);
   color: white;
-  box-shadow: 0 6px 18px rgba(59,130,246,0.12);
-}
-.gov-copy {
-  @apply text-xs text-slate-600 px-2 py-1 rounded-md border border-slate-100;
+  transform: translateY(-1px);
 }
 
-/* submit */
-.gov-submit {
-  @apply w-full mt-2 py-3 rounded-xl text-sm font-bold transition-all duration-200;
-  background: linear-gradient(90deg, #a78bfa, #7c3aed);
+.civic-form-header-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.civic-form-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.civic-form-progress {
+  background: var(--accent-saffron);
   color: white;
-  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.12);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
-.gov-submit:hover {
-  transform: translateY(-3px);
-  background: linear-gradient(90deg, #7c3aed, #4c1d95);
+
+/* Form Container */
+.civic-form-container {
+  flex: 1;
+  padding: 16px;
+  max-width: 100%;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  height: calc(100vh - 70px) !important;
+  max-height: calc(100vh - 70px) !important;
+  /* Android scrolling fixes */
+  scroll-behavior: auto !important;
+  overscroll-behavior: contain !important;
+  transform: translateZ(0) !important;
+  -webkit-transform: translateZ(0) !important;
+  will-change: scroll-position !important;
 }
-=======
-  background: linear-gradient(90deg,#0ea5b7,#065f46);
+
+/* Android specific fixes for form container */
+@media screen and (max-width: 768px) {
+  .civic-form-container {
+    height: calc(100vh - 80px) !important;
+    max-height: calc(100vh - 80px) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-behavior: auto !important;
+    position: relative !important;
+    /* Force proper scrolling on Android */
+    transform: translate3d(0, 0, 0) !important;
+    -webkit-transform: translate3d(0, 0, 0) !important;
+    backface-visibility: hidden !important;
+    -webkit-backface-visibility: hidden !important;
+    perspective: 1000px !important;
+    -webkit-perspective: 1000px !important;
+  }
+}
+
+/* =================================================================
+   PERFECT SCROLLABLE ISSUE TYPES - MOBILE OPTIMIZED
+   ================================================================= */
+
+.civic-issue-types-scroll-container {
+  width: 100% !important;
+  overflow: hidden !important;
+  position: relative !important;
+}
+
+.civic-issue-types-scroll-track {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 8px !important;
+  padding: 8px 0 12px 0 !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  scroll-behavior: smooth !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+  touch-action: pan-x !important;
+  position: relative !important;
+  min-width: 100% !important;
+  width: auto !important;
+  transform: translateZ(0) !important;
+  -webkit-transform: translateZ(0) !important;
+  will-change: transform !important;
+}
+
+.civic-issue-types-scroll-track::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.civic-issue-type-scroll-chip {
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+  min-width: 70px !important;
+  max-width: 80px !important;
+  width: 70px !important;
+  background: var(--background-light);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 10px 6px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-height: 60px;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+  transform: translateZ(0) !important;
+  -webkit-transform: translateZ(0) !important;
+  will-change: transform !important;
+}
+
+.civic-issue-type-scroll-chip:hover {
+  background: var(--primary-blue-light);
+  border-color: var(--primary-blue);
+  transform: translateY(-1px) translateZ(0);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.civic-issue-type-scroll-chip.selected {
+  background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-dark));
+  border-color: var(--primary-blue);
   color: white;
-  box-shadow: 0 8px 24px rgba(6,95,70,0.12);
-}
-.gov-submit:hover { transform: translateY(-3px); }
-
-
-/* subtle footer */
-.gov-footer {
-  @apply text-center text-xs text-slate-500 mt-4;
+  transform: translateY(-1px) translateZ(0);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
-/* small toast */
-.gov-toast {
-  @apply fixed right-6 bottom-6 bg-indigo-600 text-white px-4 py-2 rounded-lg shadow-lg text-sm;
-  animation: toast-in 320ms ease;
+.civic-issue-type-scroll-chip.preselected {
+  background: linear-gradient(135deg, var(--success-green), #059669);
+  border-color: var(--success-green);
+  color: white;
+  animation: pulse-preselected 2s ease-in-out infinite;
 }
 
-@keyframes toast-in {
-  from { transform: translateY(12px); opacity: 0; } 
-  to { transform: translateY(0); opacity: 1; }
+.civic-issue-scroll-icon {
+  font-size: 18px;
+  display: block;
+  line-height: 1;
 }
 
-/* Responsive tweaks */
-@media (min-width: 768px) {
-  .gov-card { padding: 2.5rem; }
+.civic-issue-scroll-text {
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
 }
 
-/* Fade in for card */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Photo Section */
+.civic-photo-capture-area {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: stretch;
+  width: 100%;
 }
-.animate-fadeIn { animation: fadeIn 0.5s ease forwards; }
 
-/* Slide up for tagline */
+.civic-capture-button {
+  background: linear-gradient(135deg, var(--accent-saffron), #d97706);
+  color: white;
+  border: none;
+  padding: 14px 16px;
+  border-radius: 12px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 48px;
+  box-sizing: border-box;
+}
+
+.civic-capture-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.civic-capture-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.civic-divider {
+  color: var(--text-light);
+  font-size: 12px;
+  position: relative;
+  padding: 12px 0;
+  text-align: center;
+  width: 100%;
+}
+
+.civic-divider::before,
+.civic-divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: calc(50% - 20px);
+  height: 1px;
+  background: var(--border-light);
+}
+
+.civic-divider::before {
+  left: 0;
+}
+
+.civic-divider::after {
+  right: 0;
+}
+
+.civic-upload-button {
+  background: var(--background-light);
+  border: 1px dashed var(--border-light);
+  border-radius: 12px;
+  padding: 14px 16px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 48px;
+  box-sizing: border-box;
+}
+
+.civic-upload-button:hover {
+  background: var(--primary-blue-light);
+  border-color: var(--primary-blue);
+  color: var(--primary-blue);
+}
+
+/* Photo Preview */
+.civic-photo-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.civic-photo-container {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--background-light);
+  width: 100%;
+}
+
+.civic-photo-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+.civic-photo-remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  background: rgba(239, 68, 68, 0.9);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.civic-photo-remove:hover {
+  background: #dc2626;
+  transform: scale(1.05);
+}
+
+.civic-photo-details {
+  background: var(--background-light);
+  border-radius: 12px;
+  padding: 12px;
+  width: 100%;
+}
+
+.civic-photo-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.civic-photo-status {
+  color: var(--success-green);
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.civic-photo-size {
+  color: var(--text-light);
+  font-size: 11px;
+  background: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.civic-gps-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--success-green);
+  font-size: 11px;
+  font-weight: 500;
+  background: #f0fdf4;
+  padding: 4px 8px;
+  border-radius: 6px;
+  margin-bottom: 4px;
+}
+
+.civic-gps-tag:last-child {
+  margin-bottom: 0;
+}
+
+.civic-gps-indicator {
+  width: 6px;
+  height: 6px;
+  background: var(--success-green);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+/* Description Section */
+.civic-character-count {
+  color: var(--text-light);
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.civic-textarea {
+  width: 100%;
+  background: var(--background-light);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  transition: all 0.2s ease;
+  min-height: 80px;
+  box-sizing: border-box;
+}
+
+.civic-textarea:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  background: white;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.civic-textarea::placeholder {
+  color: var(--text-light);
+}
+
+/* Location Section */
+.civic-location-display {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.civic-location-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.civic-location-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.civic-location-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.civic-location-text {
+  font-weight: 600;
+  color: #065f46;
+  font-size: 13px;
+}
+
+.civic-location-verified {
+  background: var(--success-green);
+  color: white;
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.civic-coordinates {
+  font-family: monospace;
+  color: var(--text-dark);
+  font-size: 12px;
+  margin-bottom: 4px;
+  word-break: break-all;
+}
+
+.civic-refresh-location {
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  padding: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.civic-refresh-location:hover:not(:disabled) {
+  background: var(--background-light);
+  transform: rotate(180deg);
+}
+
+.civic-get-location-button {
+  background: var(--background-light);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 12px 16px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.civic-get-location-button:hover:not(:disabled) {
+  background: var(--primary-blue-light);
+  border-color: var(--primary-blue);
+  color: var(--primary-blue);
+}
+
+.civic-get-location-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Submit Section */
+.civic-submit-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.civic-submit-button {
+  background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-dark));
+  color: white;
+  border: none;
+  padding: 14px 16px;
+  border-radius: 12px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 48px;
+  box-sizing: border-box;
+}
+
+.civic-submit-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.civic-submit-button:disabled {
+  background: #d1d5db;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Checklist */
+.civic-checklist {
+  background: var(--background-light);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.civic-checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-light);
+  transition: all 0.2s ease;
+}
+
+.civic-checklist-item.completed {
+  color: var(--success-green);
+  font-weight: 500;
+}
+
+/* Success Card Styles */
+.civic-success-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+.civic-success-card {
+  background: var(--secondary-white);
+  border-radius: 24px;
+  padding: 32px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  animation: scaleIn 0.3s ease;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  max-height: 90vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.civic-success-header {
+  margin-bottom: 24px;
+}
+
+.civic-success-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  line-height: 1;
+}
+
+.civic-success-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+}
+
+.civic-success-subtitle {
+  color: var(--text-light);
+  font-size: 16px;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.civic-success-details {
+  background: var(--background-light);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.civic-success-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.civic-success-row:last-child {
+  margin-bottom: 0;
+}
+
+.civic-success-label {
+  font-weight: 500;
+  color: var(--text-light);
+  font-size: 14px;
+}
+
+.civic-success-value {
+  font-weight: 600;
+  color: var(--text-dark);
+  font-size: 14px;
+  word-break: break-word;
+  font-family: monospace;
+}
+
+.civic-success-value-highlight {
+  font-weight: 600;
+  color: var(--success-green);
+  font-size: 14px;
+  background: #f0fdf4;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.civic-success-category {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.civic-success-category-icon {
+  font-size: 16px;
+}
+
+.civic-success-category-text {
+  font-weight: 600;
+  color: var(--text-dark);
+  font-size: 14px;
+}
+
+.civic-success-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.civic-success-btn-primary {
+  background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-dark));
+  color: white;
+  border: none;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.civic-success-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+}
+
+.civic-success-btn-secondary {
+  background: var(--background-light);
+  color: var(--text-dark);
+  border: 2px solid var(--border-light);
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.civic-success-btn-secondary:hover {
+  background: var(--primary-blue-light);
+  border-color: var(--primary-blue);
+  color: var(--primary-blue);
+}
+
+.civic-success-footer {
+  border-top: 1px solid var(--border-light);
+  padding-top: 16px;
+}
+
+.civic-success-footer-text {
+  color: var(--text-light);
+  font-size: 14px;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Spinner */
+.civic-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Toast */
+.civic-toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 1000;
+  animation: slideUp 0.3s ease;
+  max-width: calc(100vw - 40px);
+  text-align: center;
+  box-sizing: border-box;
+}
+
+/* Hidden Input */
+.civic-hidden-input {
+  display: none;
+}
+
+/* =================================================================
+   ANIMATIONS - ENHANCED
+   ================================================================= */
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.animate-slideUp { animation: slideUp 0.6s ease forwards; }
+  from {
+    transform: translate(-50%, 100%);
+    opacity: 0;
+  }
 
-/* Toast animation */
-@keyframes toast-in {
-  from { transform: translateY(12px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  to {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
 }
-.gov-toast {
-  @apply fixed right-6 bottom-6 bg-indigo-600 text-white px-4 py-2 rounded-lg shadow-lg text-sm;
-  animation: toast-in 320ms ease;
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes pulse-preselected {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+  }
+}
+
+@keyframes pulse-hint {
+
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/* =================================================================
+   MOBILE RESPONSIVENESS - ENHANCED BREAKPOINTS
+   ================================================================= */
+
+/* Large tablets and small desktops */
+@media (max-width: 1024px) {
+  .civic-page {
+    max-width: 100%;
+    padding: 0 12px;
+  }
+
+  .civic-form-container {
+    max-width: 100%;
+    padding: 12px;
+  }
+}
+
+/* Tablets */
+@media (max-width: 768px) {
+  .civic-header-home {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .civic-header-content {
+    justify-content: center;
+  }
+
+  .civic-report-button {
+    align-self: center;
+    width: fit-content;
+  }
+
+  .civic-categories-scroll-track {
+    gap: 10px !important;
+    padding: 6px 0 10px 0 !important;
+  }
+
+  .civic-issue-types-scroll-track {
+    gap: 6px !important;
+    padding: 6px 0 10px 0 !important;
+  }
+
+  .civic-category-scroll-card {
+    min-width: 110px !important;
+    max-width: 115px !important;
+    width: 110px !important;
+    padding: 14px 10px !important;
+  }
+
+  .civic-issue-type-scroll-chip {
+    min-width: 65px !important;
+    max-width: 70px !important;
+    width: 65px !important;
+    padding: 8px 6px !important;
+  }
+
+  .civic-stats-grid {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .civic-stat-number {
+    font-size: 20px;
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+  .civic-page {
+    padding-bottom: 100px !important;
+  }
+
+  .civic-section {
+    margin: 12px 12px 20px 12px;
+  }
+
+  .civic-header-home {
+    margin: 12px;
+    padding: 16px;
+  }
+
+  .civic-header-title {
+    font-size: 16px;
+  }
+
+  .civic-header-subtitle {
+    font-size: 11px;
+  }
+
+  .civic-form-header {
+    padding: 10px 12px;
+  }
+
+  .civic-form-title {
+    font-size: 16px;
+  }
+
+  .civic-form-container {
+    padding: 12px;
+  }
+
+  .civic-form-section {
+    padding: 14px;
+  }
+
+  .civic-categories-scroll-track {
+    gap: 8px !important;
+    padding: 4px 0 8px 0 !important;
+  }
+
+  .civic-issue-types-scroll-track {
+    gap: 6px !important;
+    padding: 4px 0 8px 0 !important;
+  }
+
+  .civic-category-scroll-card {
+    min-width: 100px !important;
+    max-width: 105px !important;
+    width: 100px !important;
+    padding: 12px 8px !important;
+  }
+
+  .civic-issue-type-scroll-chip {
+    min-width: 60px !important;
+    max-width: 65px !important;
+    width: 60px !important;
+    min-height: 55px !important;
+    padding: 6px 4px !important;
+  }
+
+  .civic-issue-scroll-icon {
+    font-size: 16px !important;
+  }
+
+  .civic-issue-scroll-text {
+    font-size: 9px !important;
+  }
+
+  .civic-stats-grid {
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .civic-stat-number {
+    font-size: 18px;
+  }
+
+  .civic-stat-label {
+    font-size: 10px;
+  }
+
+  .civic-success-card {
+    padding: 24px;
+    margin: 12px;
+  }
+
+  .civic-success-title {
+    font-size: 20px;
+  }
+
+  .civic-success-subtitle {
+    font-size: 14px;
+  }
+
+  .civic-profile-header {
+    padding: 20px 16px;
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .civic-impact-stats {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .civic-impact-number {
+    font-size: 24px;
+  }
+}
+
+/* Small mobile phones */
+@media (max-width: 360px) {
+  .civic-section {
+    margin: 10px 10px 16px 10px;
+  }
+
+  .civic-header-home {
+    margin: 10px;
+    padding: 14px;
+  }
+
+  .civic-form-container {
+    padding: 10px;
+  }
+
+  .civic-form-section {
+    padding: 12px;
+  }
+
+  .civic-category-scroll-card {
+    min-width: 90px !important;
+    max-width: 95px !important;
+    width: 90px !important;
+    padding: 10px 6px !important;
+  }
+
+  .civic-issue-type-scroll-chip {
+    min-width: 55px !important;
+    max-width: 60px !important;
+    width: 55px !important;
+    min-height: 50px !important;
+    padding: 6px 3px !important;
+  }
+
+  .civic-category-scroll-icon {
+    font-size: 20px !important;
+  }
+
+  .civic-category-scroll-label {
+    font-size: 11px !important;
+  }
+
+  .civic-category-scroll-desc {
+    font-size: 9px !important;
+  }
+
+  .civic-issue-scroll-icon {
+    font-size: 14px !important;
+  }
+
+  .civic-issue-scroll-text {
+    font-size: 8px !important;
+  }
+
+  .civic-stats-grid {
+    padding: 10px;
+    gap: 6px;
+  }
+
+  .civic-stat-number {
+    font-size: 16px;
+  }
+
+  .civic-stat-label {
+    font-size: 9px;
+  }
+
+  .civic-nav {
+    padding: 6px 10px 12px;
+  }
+
+  .civic-nav-item {
+    min-width: 45px;
+    font-size: 10px;
+    padding: 6px 12px;
+  }
+}
+
+/* Touch device optimizations */
+@media (pointer: coarse) {
+
+  .civic-category-scroll-card,
+  .civic-issue-type-scroll-chip {
+    min-height: 44px !important;
+  }
+
+  .civic-categories-scroll-track,
+  .civic-issue-types-scroll-track {
+    scroll-snap-type: x mandatory !important;
+  }
+
+  .civic-category-scroll-card,
+  .civic-issue-type-scroll-chip {
+    scroll-snap-align: start !important;
+  }
+
+  .civic-back-button {
+    min-width: 44px !important;
+    min-height: 44px !important;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+
+  .civic-form-section,
+  .civic-success-card {
+    border: 2px solid var(--text-dark);
+  }
+
+  .civic-category-scroll-card,
+  .civic-issue-type-scroll-chip {
+    border-width: 2px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+  .civic-category-scroll-card,
+  .civic-issue-type-scroll-chip,
+  .civic-capture-button,
+  .civic-submit-button {
+    transition: none;
+  }
+
+  .civic-category-scroll-card:hover,
+  .civic-issue-type-scroll-chip:hover,
+  .civic-capture-button:hover,
+  .civic-submit-button:hover {
+    transform: none;
+  }
+
+  .civic-success-card,
+  .civic-success-overlay {
+    animation: none;
+  }
+}
+
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+
+  .civic-categories-scroll-track,
+  .civic-issue-types-scroll-track {
+    -webkit-overflow-scrolling: touch !important;
+    scroll-behavior: auto !important;
+  }
+
+  .civic-main-content {
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .civic-page {
+    -webkit-overflow-scrolling: touch !important;
+  }
+}
+
+/* Force GPU acceleration for smooth performance */
+.civic-categories-scroll-track,
+.civic-issue-types-scroll-track,
+.civic-category-scroll-card,
+.civic-issue-type-scroll-chip {
+  transform: translateZ(0) !important;
+  -webkit-transform: translateZ(0) !important;
+  will-change: transform !important;
+}
+
+/* Ensure proper scrolling on all mobile devices */
+.civic-categories-scroll-track,
+.civic-issue-types-scroll-track {
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  scroll-behavior: smooth !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+  touch-action: pan-x !important;
+}
+
+/* Additional mobile fixes for older devices */
+@media (max-width: 480px) and (-webkit-min-device-pixel-ratio: 1) {
+
+  .civic-categories-scroll-track,
+  .civic-issue-types-scroll-track {
+    overflow-x: scroll !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+}
+
+/* Add these Android-specific scrolling fixes after line 242 */
+
+/* Android Chrome/WebView specific fixes */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+
+  .civic-categories-scroll-track,
+  .civic-issue-types-scroll-track {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-behavior: auto !important;
+    transform: translate3d(0, 0, 0) !important;
+    -webkit-transform: translate3d(0, 0, 0) !important;
+    backface-visibility: hidden !important;
+    -webkit-backface-visibility: hidden !important;
+    perspective: 1000px !important;
+    -webkit-perspective: 1000px !important;
+  }
+
+  .civic-category-scroll-card,
+  .civic-issue-type-scroll-chip {
+    transform: translateZ(0) !important;
+    -webkit-transform: translateZ(0) !important;
+    backface-visibility: hidden !important;
+    -webkit-backface-visibility: hidden !important;
+  }
+}
+
+/* Android Browser fixes */
+@supports (not (-webkit-touch-callout: none)) {
+
+  .civic-categories-scroll-track,
+  .civic-issue-types-scroll-track {
+    overflow-x: scroll !important;
+    overflow-y: hidden !important;
+    scroll-behavior: auto !important;
+    -webkit-overflow-scrolling: auto !important;
+    transform: translate3d(0, 0, 0) !important;
+    will-change: scroll-position !important;
+  }
+}
+
+/* Samsung Internet Browser fixes */
+@media screen and (max-device-width: 767px) {
+
+  .civic-categories-scroll-track,
+  .civic-issue-types-scroll-track {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-behavior: smooth !important;
+    overscroll-behavior-x: contain !important;
+    touch-action: pan-x !important;
+  }
+}
+
+/* Force hardware acceleration for Android */
+.civic-categories-scroll-container,
+.civic-issue-types-scroll-container {
+  transform: translateZ(0) !important;
+  -webkit-transform: translateZ(0) !important;
+  will-change: transform !important;
+  contain: layout style paint !important;
+}
+
+/* Add these after line 1820 (after the existing Android fixes) */
+
+/* Comprehensive Android Scrolling Fixes */
+@media screen and (max-width: 768px) {
+
+  /* Force proper scrolling for all Android browsers */
+  html {
+    height: 100% !important;
+    overflow: hidden !important;
+    -webkit-text-size-adjust: 100% !important;
+    touch-action: manipulation !important;
+  }
+
+  body {
+    height: 100% !important;
+    overflow: hidden !important;
+    position: fixed !important;
+    width: 100% !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+  }
+
+  #root {
+    height: 100vh !important;
+    max-height: 100vh !important;
+    overflow: hidden !important;
+    position: relative !important;
+    width: 100% !important;
+  }
+
+  .civic-app {
+    height: 100vh !important;
+    max-height: 100vh !important;
+    overflow: hidden !important;
+    position: relative !important;
+    width: 100% !important;
+  }
+
+  .civic-main-content {
+    height: calc(100vh - 90px) !important;
+    max-height: calc(100vh - 90px) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-behavior: auto !important;
+    overscroll-behavior: auto !important;
+    position: relative !important;
+    /* Android browser compatibility */
+    transform: translate3d(0, 0, 0) !important;
+    -webkit-transform: translate3d(0, 0, 0) !important;
+    will-change: scroll-position !important;
+    contain: layout style paint !important;
+    -webkit-backface-visibility: hidden !important;
+    backface-visibility: hidden !important;
+  }
+
+  .civic-page {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow-y: visible !important;
+    overflow-x: hidden !important;
+    position: relative !important;
+    width: 100% !important;
+    padding-bottom: 100px !important;
+  }
+}
+
+/* Samsung Internet & Chrome Mobile specific fixes */
+@supports not (-webkit-touch-callout: none) {
+  .civic-main-content {
+    overflow-y: scroll !important;
+    -webkit-overflow-scrolling: auto !important;
+    scroll-behavior: auto !important;
+    transform: translateZ(0) !important;
+    -webkit-transform: translateZ(0) !important;
+  }
+
+  .civic-page {
+    overflow-y: visible !important;
+    position: relative !important;
+  }
+}
+
+/* Android Chrome specific scrolling fix */
+@media screen and (-webkit-min-device-pixel-ratio: 0) and (max-width: 768px) {
+  .civic-main-content {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-behavior: auto !important;
+    overscroll-behavior-y: contain !important;
+    /* Force hardware acceleration */
+    transform: translate3d(0, 0, 0) !important;
+    -webkit-transform: translate3d(0, 0, 0) !important;
+    will-change: transform, scroll-position !important;
+    /* Prevent scrolling issues */
+    touch-action: pan-y !important;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+  }
+}
+
+/* Fix for older Android versions */
+@media screen and (max-width: 768px) and (-webkit-device-pixel-ratio: 1) {
+  .civic-main-content {
+    overflow-y: scroll !important;
+    -webkit-overflow-scrolling: auto !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* WebView specific fixes for hybrid apps */
+@media screen and (max-width: 768px) {
+  .civic-main-content {
+    /* Ensure scrolling works in WebView */
+    -webkit-transform: translateZ(0) !important;
+    transform: translateZ(0) !important;
+    isolation: isolate !important;
+  }
+}
+
+/* =================================================================
+   ENHANCED REPORTS PAGE - INTERACTIVE DESIGN
+   ================================================================= */
+
+.civic-reports-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.civic-reports-stats {
+  display: flex;
+  gap: 16px;
+}
+
+.civic-mini-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.civic-mini-stat-number {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary-blue);
+  line-height: 1;
+}
+
+.civic-mini-stat-label {
+  font-size: 11px;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+/* Filter Tabs */
+.civic-filter-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 4px;
+}
+
+.civic-filter-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.civic-filter-tab {
+  background: var(--background-light);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.civic-filter-tab:hover {
+  background: var(--primary-blue-light);
+  border-color: var(--primary-blue);
+  color: var(--primary-blue);
+}
+
+.civic-filter-tab.active {
+  background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-dark));
+  border-color: var(--primary-blue);
+  color: white;
+}
+
+.civic-filter-count {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.civic-filter-tab.active .civic-filter-count {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Reports List */
+.civic-reports-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.civic-report-card {
+  background: var(--secondary-white);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-light);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.civic-report-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border-color: var(--primary-blue);
+}
+
+.civic-report-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.civic-report-card-title-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.civic-report-category-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--background-light);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-dark);
+  flex-shrink: 0;
+}
+
+.civic-report-category-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.civic-report-category-text {
+  text-transform: capitalize;
+}
+
+.civic-report-status-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: capitalize;
+  flex-shrink: 0;
+}
+
+.civic-report-priority-badge {
+  color: white;
+  padding: 3px 8px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.civic-report-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.civic-report-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.civic-report-card-description {
+  font-size: 14px;
+  color: var(--text-light);
+  line-height: 1.4;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.civic-report-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.civic-report-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-light);
+}
+
+.civic-report-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-light);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.civic-report-ticket {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+}
+
+.civic-report-ticket-label {
+  color: var(--text-light);
+}
+
+.civic-report-ticket-number {
+  font-family: monospace;
+  font-weight: 600;
+  color: var(--text-dark);
+  background: var(--background-light);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.civic-report-department {
+  font-size: 11px;
+  color: var(--text-light);
+  background: var(--background-light);
+  padding: 3px 8px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+/* Modal Styles */
+.civic-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+.civic-modal-content {
+  background: var(--secondary-white);
+  border-radius: 20px;
+  max-width: 500px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  animation: scaleIn 0.3s ease;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+.civic-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 24px 24px 16px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.civic-modal-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+  line-height: 1.3;
+  flex: 1;
+  padding-right: 16px;
+}
+
+.civic-modal-close {
+  background: var(--background-light);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.civic-modal-close:hover {
+  background: var(--error-red);
+  color: white;
+}
+
+.civic-modal-body {
+  padding: 16px 24px 24px;
+}
+
+.civic-modal-badges {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.civic-modal-category-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--background-light);
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.civic-modal-status-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.civic-modal-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.civic-modal-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.civic-modal-detail-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.civic-modal-detail-value {
+  font-size: 14px;
+  color: var(--text-dark);
+  line-height: 1.4;
+}
+
+/* =================================================================
+   ENHANCED PROFILE PAGE - PROFESSIONAL DESIGN
+   ================================================================= */
+
+.civic-profile-header-enhanced {
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+  color: white;
+  margin: 16px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+}
+
+.civic-profile-banner {
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.civic-profile-main-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  flex: 1;
+  min-width: 280px;
+}
+
+.civic-profile-avatar-large {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.civic-avatar-placeholder-large {
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  backdrop-filter: blur(10px);
+  border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.civic-profile-status-dot {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 16px;
+  height: 16px;
+  background: var(--success-green);
+  border-radius: 50%;
+  border: 3px solid white;
+}
+
+.civic-profile-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.civic-profile-name-large {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+  line-height: 1.2;
+}
+
+.civic-profile-email {
+  font-size: 14px;
+  opacity: 0.9;
+  margin: 0 0 8px 0;
+  font-family: monospace;
+}
+
+.civic-profile-location-info,
+.civic-profile-member-since {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  opacity: 0.9;
+  margin-bottom: 4px;
+}
+
+.civic-profile-quick-stats {
+  display: flex;
+  gap: 20px;
+  flex-shrink: 0;
+}
+
+.civic-quick-stat-item {
+  text-align: center;
+}
+
+.civic-quick-stat-number {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 4px;
+  color: var(--accent-saffron);
+}
+
+.civic-quick-stat-label {
+  font-size: 11px;
+  opacity: 0.9;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* Profile Tabs */
+.civic-profile-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 0 16px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.civic-profile-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.civic-profile-tab {
+  background: var(--background-light);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.civic-profile-tab:hover {
+  background: var(--primary-blue-light);
+  border-color: var(--primary-blue);
+  color: var(--primary-blue);
+}
+
+.civic-profile-tab.active {
+  background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-dark));
+  border-color: var(--primary-blue);
+  color: white;
+}
+
+/* Enhanced Impact Grid */
+.civic-impact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+}
+
+.civic-impact-card {
+  background: var(--secondary-white);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-light);
+  transition: all 0.2s ease;
+}
+
+.civic-impact-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.civic-impact-card-primary {
+  border-left: 4px solid var(--primary-blue);
+}
+
+.civic-impact-card-success {
+  border-left: 4px solid var(--success-green);
+}
+
+.civic-impact-card-warning {
+  border-left: 4px solid var(--accent-saffron);
+}
+
+.civic-impact-card-danger {
+  border-left: 4px solid var(--error-red);
+}
+
+.civic-impact-card-icon {
+  font-size: 24px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.civic-impact-card-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.civic-impact-card-number {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-dark);
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.civic-impact-card-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-dark);
+  line-height: 1.2;
+  margin-bottom: 1px;
+}
+
+.civic-impact-card-sublabel {
+  font-size: 10px;
+  color: var(--text-light);
+  line-height: 1.2;
+}
+
+/* Category Preferences */
+.civic-category-preferences {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.civic-preference-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--secondary-white);
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+}
+
+.civic-preference-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 120px;
+  flex-shrink: 0;
+}
+
+.civic-preference-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.civic-preference-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dark);
+  text-transform: capitalize;
+}
+
+.civic-preference-count {
+  font-size: 11px;
+  color: var(--text-light);
+}
+
+.civic-preference-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--background-light);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.civic-preference-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-blue), var(--primary-blue-dark));
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.civic-preference-percentage {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-dark);
+  min-width: 35px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* User Reports List */
+.civic-user-reports-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.civic-user-report-card {
+  background: var(--secondary-white);
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid var(--border-light);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.civic-user-report-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.civic-user-report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.civic-user-report-category {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--background-light);
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.civic-user-report-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.civic-user-report-category-name {
+  text-transform: capitalize;
+}
+
+.civic-user-report-status {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.civic-user-report-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+}
+
+.civic-user-report-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-light);
+}
+
+.civic-user-report-ticket {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.civic-user-report-ticket-label {
+  color: var(--text-light);
+}
+
+.civic-user-report-ticket-number {
+  font-family: monospace;
+  font-weight: 600;
+  color: var(--text-dark);
+  background: var(--background-light);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.civic-user-report-date {
+  color: var(--text-light);
+}
+
+.civic-user-report-resolution {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--success-green);
+  font-weight: 500;
+}
+
+/* Achievements Grid */
+.civic-achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.civic-achievement-card {
+  background: var(--secondary-white);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  border: 1px solid var(--border-light);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.civic-achievement-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border-color: var(--accent-saffron);
+}
+
+.civic-achievement-icon {
+  font-size: 40px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.civic-achievement-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.civic-achievement-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0 0 4px 0;
+  line-height: 1.3;
+}
+
+.civic-achievement-description {
+  font-size: 13px;
+  color: var(--text-light);
+  line-height: 1.4;
+  margin: 0 0 8px 0;
+}
+
+.civic-achievement-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.civic-achievement-date {
+  font-size: 11px;
+  color: var(--text-light);
+}
+
+.civic-achievement-points {
+  background: var(--accent-saffron);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* =================================================================
+   MOBILE RESPONSIVENESS FOR NEW COMPONENTS
+   ================================================================= */
+
+@media (max-width: 768px) {
+  .civic-reports-header-content {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .civic-reports-stats {
+    justify-content: center;
+  }
+
+  .civic-profile-banner {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .civic-profile-main-info {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-width: auto;
+  }
+
+  .civic-profile-quick-stats {
+    justify-content: center;
+  }
+
+  .civic-impact-grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+  }
+
+  .civic-achievements-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .civic-modal-content {
+    margin: 10px;
+    max-height: calc(100vh - 40px);
+  }
+}
+
+@media (max-width: 480px) {
+  .civic-filter-tabs {
+    gap: 6px;
+  }
+
+  .civic-filter-tab {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .civic-report-card {
+    padding: 12px;
+  }
+
+  .civic-profile-tabs {
+    padding: 0 12px;
+  }
+
+  .civic-profile-tab {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+
+  .civic-impact-card {
+    padding: 12px;
+  }
+
+  .civic-achievement-card {
+    padding: 16px;
+  }
+
+  .civic-modal-header {
+    padding: 16px;
+  }
+
+  .civic-modal-body {
+    padding: 12px 16px 16px;
+  }
+}
+
+/* Ultimate Android Scrolling Fix */
+@media screen and (max-width: 768px) and (orientation: portrait) {
+  * {
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  html,
+  body {
+    touch-action: manipulation !important;
+    -webkit-text-size-adjust: 100% !important;
+    -webkit-font-smoothing: antialiased !important;
+  }
+
+  .civic-main-content,
+  .civic-form-container {
+    /* Absolute positioning can fix Android scrolling issues */
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 90px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    transform: translateZ(0) !important;
+    -webkit-transform: translateZ(0) !important;
+  }
+
+  .civic-report-form .civic-form-container {
+    bottom: 0 !important;
+    top: 70px !important;
+  }
+}
+
+/* Force scroll for problematic Android browsers */
+@media screen and (max-width: 768px) {
+
+  .civic-page,
+  .civic-main-content,
+  .civic-form-container {
+    /* Last resort - force scroll with momentum */
+    overflow-y: scroll !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-behavior: auto !important;
+    overscroll-behavior: auto !important;
+    /* Hardware acceleration */
+    transform: translate3d(0, 0, 0) !important;
+    -webkit-transform: translate3d(0, 0, 0) !important;
+    will-change: transform !important;
+    contain: layout style paint !important;
+  }
+}
+
+/* Prevent zoom on double tap for Android */
+@media screen and (max-width: 768px) {
+  * {
+    touch-action: manipulation !important;
+  }
+
+  input,
+  textarea,
+  select {
+    touch-action: manipulation !important;
+    -webkit-user-select: text !important;
+    user-select: text !important;
+  }
+}
+
+/* Final Android compatibility layer */
+@supports not (-webkit-touch-callout: none) {
+
+  /* Non-iOS devices (mainly Android) */
+  .civic-main-content,
+  .civic-form-container,
+  .civic-page {
+    overflow-y: scroll !important;
+    -webkit-overflow-scrolling: auto !important;
+    scroll-behavior: auto !important;
+    height: auto !important;
+    min-height: calc(100vh - 90px) !important;
+    max-height: none !important;
+  }
+}
+
+/* =================================================================
+   ULTIMATE MOBILE SCROLLING FIX - OVERRIDE ALL
+   ================================================================= */
+
+/* Force proper mobile behavior */
+@media screen and (max-width: 768px) {
+  html {
+    height: 100% !important;
+    overflow: hidden !important;
+    position: fixed !important;
+    width: 100% !important;
+  }
+
+  body {
+    height: 100% !important;
+    overflow: hidden !important;
+    position: fixed !important;
+    width: 100% !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  #root {
+    height: 100vh !important;
+    overflow: hidden !important;
+    position: relative !important;
+    width: 100% !important;
+  }
+
+  .civic-app {
+    height: 100vh !important;
+    overflow: hidden !important;
+    position: relative !important;
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .civic-main-content {
+    flex: 1 !important;
+    height: calc(100vh - 90px) !important;
+    overflow-y: scroll !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    position: relative !important;
+    width: 100% !important;
+  }
+
+  .civic-page {
+    width: 100% !important;
+    min-height: 100% !important;
+    padding-bottom: 100px !important;
+    position: relative !important;
+  }
+
+  /* Report Form Fix */
+  .civic-report-form {
+    height: 100vh !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .civic-form-container {
+    flex: 1 !important;
+    height: calc(100vh - 80px) !important;
+    overflow-y: scroll !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding: 16px !important;
+  }
+}
+
+/* Navigation fix */
+.civic-nav {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 90px !important;
+  background: var(--secondary-white) !important;
+  border-top: 1px solid var(--border-light) !important;
+  padding: 8px 12px !important;
+  display: flex !important;
+  justify-content: space-around !important;
+  z-index: 100 !important;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Horizontal scrolling categories - keep existing */
+.civic-categories-scroll-track,
+.civic-issue-types-scroll-track {
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  display: flex !important;
+  gap: 12px !important;
+  padding: 8px 0 12px 0 !important;
+}
+
