@@ -1,282 +1,233 @@
 import React, { useState, useEffect } from "react";
-import { Plus, MapPin, TrendingUp, Clock } from "lucide-react";
-import { userAPI, analyticsAPI } from "../services/api";
+import { useNavigate } from "react-router-dom";
+import {
+  MapPin,
+  TrendingUp,
+  Users,
+  CheckCircle,
+  Clock,
+  LogOut,
+} from "lucide-react";
+import { analyticsAPI, userAPI } from "../services/api";
+import { useAuth } from "../context/AuthContext";
 
-const quickCategories = [
-  {
-    key: "garbage",
-    label: "Garbage",
-    icon: "🗑️",
-    reportValue: "garbage",
-    description: "Waste management issues",
-  },
-  {
-    key: "streetlight",
-    label: "Street Light",
-    icon: "💡",
-    reportValue: "streetlight",
-    description: "Lighting problems",
-  },
-  {
-    key: "pothole",
-    label: "Road Damage",
-    icon: "🛣️",
-    reportValue: "pothole",
-    description: "Road infrastructure",
-  },
-  {
-    key: "water",
-    label: "Water Supply",
-    icon: "💧",
-    reportValue: "water",
-    description: "Water related issues",
-  },
-  {
-    key: "traffic",
-    label: "Traffic",
-    icon: "🚦",
-    reportValue: "traffic",
-    description: "Traffic signals",
-  },
-  {
-    key: "drainage",
-    label: "Drainage",
-    icon: "🌊",
-    reportValue: "drainage",
-    description: "Drainage problems",
-  },
-  {
-    key: "construction",
-    label: "Construction",
-    icon: "🏗️",
-    reportValue: "construction",
-    description: "Construction work",
-  },
-  {
-    key: "parks",
-    label: "Parks",
-    icon: "🌳",
-    reportValue: "parks",
-    description: "Park maintenance",
-  },
-  {
-    key: "electricity",
-    label: "Power",
-    icon: "⚡",
-    reportValue: "electricity",
-    description: "Power issues",
-  },
-  {
-    key: "safety",
-    label: "Safety",
-    icon: "🛡️",
-    reportValue: "safety",
-    description: "Safety concerns",
-  },
-];
-
-function HomePage({ onCategorySelect, onReportClick }) {
-  const [userSuggestions, setUserSuggestions] = useState(null);
-  const [communityStats, setCommunityStats] = useState(null);
+function HomePage() {
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
+  const [communityStats, setCommunityStats] = useState({
+    totalReports: 0,
+    resolvedReports: 0,
+    activeCitizens: 0,
+    avgResolutionTime: "N/A",
+  });
+  const [trendingCategories, setTrendingCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [userLocation, setUserLocation] = useState({ lat: null, lng: null });
 
   useEffect(() => {
-    getCurrentLocation();
-    fetchCommunityData();
+    fetchHomeData();
   }, []);
 
-  const getCurrentLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const lat = position.coords.latitude;
-          const lng = position.coords.longitude;
-          setUserLocation({ lat, lng });
-          fetchUserSuggestions(lat, lng);
-        },
-        (error) => {
-          console.warn("Location error:", error);
-          // Use default Bengaluru coordinates
-          setUserLocation({ lat: 12.9716, lng: 77.5946 });
-          fetchUserSuggestions(12.9716, 77.5946);
-        }
-      );
-    } else {
-      setUserLocation({ lat: 12.9716, lng: 77.5946 });
-      fetchUserSuggestions(12.9716, 77.5946);
-    }
-  };
-
-  const fetchUserSuggestions = async (latitude, longitude) => {
+  const fetchHomeData = async () => {
     try {
-      const email = "rajesh.kumar@civiceye.com"; // In real app, get from auth context
-      const response = await userAPI.getSuggestions(email, latitude, longitude);
+      setLoading(true);
 
-      if (response.success) {
-        setUserSuggestions(response.suggestions);
+      const [analyticsResponse, suggestionsResponse] = await Promise.all([
+        analyticsAPI.getCommunityAnalytics(),
+        userAPI.getSuggestions(),
+      ]);
+
+      if (analyticsResponse.success) {
+        setCommunityStats(analyticsResponse.analytics);
+      }
+
+      if (suggestionsResponse.success) {
+        setTrendingCategories(
+          suggestionsResponse.suggestions.trendingCategories
+        );
       }
     } catch (error) {
-      console.error("Error fetching suggestions:", error);
-    }
-  };
-
-  const fetchCommunityData = async () => {
-    try {
-      const response = await analyticsAPI.getCommunityAnalytics();
-
-      if (response.success) {
-        setCommunityStats(response.analytics);
-      }
-    } catch (error) {
-      console.error("Error fetching community data:", error);
+      console.error("Error fetching home data:", error);
+      // Use fallback data
+      setCommunityStats({
+        totalReports: 2,
+        resolvedReports: 1,
+        activeCitizens: 25,
+        avgResolutionTime: "2.1 days",
+      });
+      setTrendingCategories([
+        { category: "streetlight", count: 15 },
+        { category: "garbage", count: 12 },
+        { category: "pothole", count: 8 },
+      ]);
     } finally {
       setLoading(false);
     }
   };
 
+  const categories = [
+    {
+      id: "garbage",
+      name: "Garbage",
+      icon: "🗑️",
+      description: "Waste management issues",
+      color: "#10b981",
+    },
+    {
+      id: "streetlight",
+      name: "Street Light",
+      icon: "💡",
+      description: "Lighting problems",
+      color: "#f59e0b",
+    },
+    {
+      id: "pothole",
+      name: "Road Damage",
+      icon: "🕳️",
+      description: "Road infrastructure",
+      color: "#ef4444",
+    },
+    {
+      id: "water",
+      name: "Water Issues",
+      icon: "💧",
+      description: "Water supply problems",
+      color: "#3b82f6",
+    },
+    {
+      id: "electricity",
+      name: "Electricity",
+      icon: "⚡",
+      description: "Power supply issues",
+      color: "#f59e0b",
+    },
+    {
+      id: "traffic",
+      name: "Traffic",
+      icon: "🚦",
+      description: "Traffic management",
+      color: "#8b5cf6",
+    },
+  ];
+
+  const handleCategorySelect = (categoryId) => {
+    navigate(`/report?category=${categoryId}`);
+  };
+
+  const handleReportClick = () => {
+    navigate("/report");
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="civic-spinner">🏛️</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="civic-page">
-      {/* Enhanced Header with Location */}
-      <div className="civic-page-header">
-        <div className="civic-header-content">
-          <div className="civic-greeting-section">
-            <div className="civic-greeting-main">
-              <h1 className="civic-greeting-title">🏛️ CivicEye</h1>
-              <p className="civic-greeting-subtitle">
-                Building better communities together
-              </p>
-            </div>
-            <div className="civic-location-badge">
-              <MapPin size={14} />
-              <span>HSR Layout, Bengaluru</span>
-            </div>
-          </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 px-4 py-6">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-800">
+            Welcome, {user?.name || "Citizen"} 🇮🇳
+          </h1>
+          <p className="text-gray-600">Building better communities together</p>
         </div>
-      </div>
-
-      {/* Smart Suggestions Section */}
-      {userSuggestions?.quickActions && (
-        <div className="civic-section">
-          <div className="civic-section-header">
-            <h2 className="civic-section-title">Smart Suggestions</h2>
-            <p className="civic-section-subtitle">
-              Based on your location and activity
-            </p>
-          </div>
-          <div className="civic-suggestions-grid">
-            {userSuggestions.quickActions
-              .slice(0, 4)
-              .map((suggestion, index) => (
-                <button
-                  key={index}
-                  onClick={() => onCategorySelect(suggestion.category)}
-                  className={`civic-suggestion-card civic-suggestion-${suggestion.priority}`}
-                >
-                  <div className="civic-suggestion-icon">
-                    {getCategoryIcon(suggestion.category)}
-                  </div>
-                  <div className="civic-suggestion-content">
-                    <span className="civic-suggestion-label">
-                      {suggestion.label}
-                    </span>
-                    <span className="civic-suggestion-priority">
-                      {suggestion.priority} priority
-                    </span>
-                  </div>
-                </button>
-              ))}
-          </div>
-        </div>
-      )}
-
-      {/* Community Impact Stats */}
-      {communityStats && (
-        <div className="civic-section">
-          <div className="civic-section-header">
-            <h2 className="civic-section-title">Community Impact</h2>
-            <p className="civic-section-subtitle">
-              Real-time progress in your area
-            </p>
-          </div>
-          <div className="civic-impact-stats-grid">
-            <div className="civic-impact-stat">
-              <div className="civic-impact-stat-icon">📊</div>
-              <div className="civic-impact-stat-content">
-                <div className="civic-impact-stat-number">
-                  {communityStats.totalReports || 0}
-                </div>
-                <div className="civic-impact-stat-label">Total Reports</div>
-              </div>
-            </div>
-            <div className="civic-impact-stat">
-              <div className="civic-impact-stat-icon">✅</div>
-              <div className="civic-impact-stat-content">
-                <div className="civic-impact-stat-number">
-                  {communityStats.resolvedReports || 0}
-                </div>
-                <div className="civic-impact-stat-label">Resolved</div>
-              </div>
-            </div>
-            <div className="civic-impact-stat">
-              <div className="civic-impact-stat-icon">⏱️</div>
-              <div className="civic-impact-stat-content">
-                <div className="civic-impact-stat-number">
-                  {communityStats.avgResolutionTime || "N/A"}
-                </div>
-                <div className="civic-impact-stat-label">Avg Resolution</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Existing Quick Categories */}
-      <div className="civic-section">
-        <div className="civic-section-header">
-          <h2 className="civic-section-title">Report Issues</h2>
-          <p className="civic-section-subtitle">
-            Select a category to get started
-          </p>
-        </div>
-
-        <div className="civic-categories-scroll-container">
-          <div className="civic-categories-scroll-track">
-            {quickCategories.map((category) => (
-              <button
-                key={category.key}
-                onClick={() => onCategorySelect(category.reportValue)}
-                className="civic-category-scroll-card"
-              >
-                <div className="civic-category-scroll-icon">
-                  <span className="civic-category-scroll-emoji">
-                    {category.icon}
-                  </span>
-                </div>
-                <div className="civic-category-scroll-content">
-                  <span className="civic-category-scroll-label">
-                    {category.label}
-                  </span>
-                  <span className="civic-category-scroll-description">
-                    {category.description}
-                  </span>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Quick Report Button */}
-      <div className="civic-section">
-        <button onClick={onReportClick} className="civic-quick-report-button">
-          <Plus size={24} />
-          <span>Quick Report</span>
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+        >
+          <LogOut size={16} />
+          Logout
         </button>
       </div>
 
-      {/* Trending Categories */}
-      {userSuggestions?.trendingCategories && (
+      {/* Hero Section */}
+      <div className="civic-section">
+        <div className="civic-hero-card">
+          <div className="civic-hero-content">
+            <h2 className="civic-hero-title">
+              🏛️ Serve Bharat — Together We Rise
+            </h2>
+            <p className="civic-hero-subtitle">
+              Quick civic updates, one tap away 🚀
+            </p>
+            <button onClick={handleReportClick} className="civic-hero-button">
+              📤 Report an Issue Now
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Categories */}
+      <div className="civic-section">
+        <div className="civic-section-header">
+          <h2 className="civic-section-title">Quick Report Categories</h2>
+          <p className="civic-section-subtitle">
+            Select an issue type to get started
+          </p>
+        </div>
+
+        <div className="civic-categories-grid">
+          {categories.map((category) => (
+            <div
+              key={category.id}
+              className="civic-category-card"
+              onClick={() => handleCategorySelect(category.id)}
+            >
+              <div className="civic-category-icon">{category.icon}</div>
+              <h3 className="civic-category-name">{category.name}</h3>
+              <p className="civic-category-desc">{category.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Community Stats */}
+      <div className="civic-section">
+        <div className="civic-section-header">
+          <h2 className="civic-section-title">Community Impact</h2>
+          <p className="civic-section-subtitle">
+            Real-time progress in your area
+          </p>
+        </div>
+
+        <div className="civic-stats-grid">
+          <div className="civic-stat-card">
+            <div className="civic-stat-icon">📊</div>
+            <div className="civic-stat-number">
+              {communityStats.totalReports}
+            </div>
+            <div className="civic-stat-label">Total Reports</div>
+          </div>
+
+          <div className="civic-stat-card">
+            <div className="civic-stat-icon">✅</div>
+            <div className="civic-stat-number">
+              {communityStats.resolvedReports}
+            </div>
+            <div className="civic-stat-label">Resolved</div>
+          </div>
+
+          <div className="civic-stat-card">
+            <div className="civic-stat-icon">⏱️</div>
+            <div className="civic-stat-number">
+              {communityStats.avgResolutionTime}
+            </div>
+            <div className="civic-stat-label">Avg Resolution</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Trending Issues */}
+      {trendingCategories.length > 0 && (
         <div className="civic-section">
           <div className="civic-section-header">
             <h2 className="civic-section-title">Trending in Your Area</h2>
@@ -284,44 +235,43 @@ function HomePage({ onCategorySelect, onReportClick }) {
               Most reported issues nearby
             </p>
           </div>
-          <div className="civic-trending-list">
-            {userSuggestions.trendingCategories
-              .slice(0, 3)
-              .map((trending, index) => (
-                <div key={index} className="civic-trending-item">
-                  <div className="civic-trending-icon">
-                    {getCategoryIcon(trending.category)}
+
+          <div className="civic-trending-wrapper-perfect">
+            {trendingCategories.map((trend, index) => (
+              <div key={index} className="civic-trending-card-perfect">
+                <div className="civic-trending-icon-wrapper">
+                  <div className="civic-trending-icon-emoji">
+                    {trend.category === "streetlight"
+                      ? "💡"
+                      : trend.category === "garbage"
+                      ? "🗑️"
+                      : trend.category === "pothole"
+                      ? "🕳️"
+                      : "📋"}
                   </div>
-                  <div className="civic-trending-content">
-                    <span className="civic-trending-category">
-                      {trending.category}
-                    </span>
-                    <span className="civic-trending-count">
-                      {trending.count} reports this week
-                    </span>
-                  </div>
-                  <TrendingUp size={16} className="civic-trending-arrow" />
                 </div>
-              ))}
+                <div className="civic-trending-info-perfect">
+                  <h3 className="civic-trending-title-perfect">
+                    {trend.category.charAt(0).toUpperCase() +
+                      trend.category.slice(1)}
+                  </h3>
+                  <p className="civic-trending-count-perfect">
+                    {trend.count} reports this week
+                  </p>
+                </div>
+                <button
+                  className="civic-trending-button-perfect"
+                  onClick={() => handleCategorySelect(trend.category)}
+                >
+                  Report
+                </button>
+              </div>
+            ))}
           </div>
         </div>
       )}
     </div>
   );
-
-  function getCategoryIcon(category) {
-    const icons = {
-      garbage: "🗑️",
-      streetlight: "💡",
-      pothole: "🕳️",
-      water: "💧",
-      traffic: "🚦",
-      drainage: "🌊",
-      electricity: "⚡",
-      noise: "🔊",
-    };
-    return icons[category] || "📋";
-  }
 }
 
 export default HomePage;

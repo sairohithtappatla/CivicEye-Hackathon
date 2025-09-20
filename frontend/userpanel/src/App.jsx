@@ -1,104 +1,69 @@
 import React, { useState, useEffect } from "react";
-import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 import HomePage from "./components/HomePage";
-import ProfilePage from "./components/ProfilePage";
-import ReportsPage from "./components/ReportsPage";
-import ReportForm from "./components/ReportForm";
 import LoginPage from "./components/LoginPage";
-import Navigation from "./components/Navigation";
+import ReportForm from "./pages/ReportForm";
+import Dashboard from "./pages/Dashboard";
 import "./index.css";
 
-// Main App Component
-function AppContent() {
-  const [currentPage, setCurrentPage] = useState("home");
-  const [showReportForm, setShowReportForm] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const { user, loading, isAuthenticated } = useAuth();
-
-  // Mobile scrolling fix
-  useEffect(() => {
-    const isMobile = window.innerWidth <= 768;
-
-    if (isMobile) {
-      setTimeout(() => {
-        const mainContent = document.querySelector(".civic-main-content");
-        if (mainContent) {
-          mainContent.style.overflowY = "scroll";
-          mainContent.style.webkitOverflowScrolling = "touch";
-          mainContent.style.height = "calc(100vh - 90px)";
-          mainContent.style.position = "relative";
-        }
-      }, 200);
-    }
-  }, []);
-
-  const handleCategorySelect = (category) => {
-    setSelectedCategory(category);
-    setShowReportForm(true);
-  };
-
-  const handleReportFormBack = () => {
-    setShowReportForm(false);
-    setSelectedCategory(null);
-    setCurrentPage("home");
-  };
-
-  const handleReportIssueClick = () => {
-    setSelectedCategory(null);
-    setShowReportForm(true);
-  };
+// Protected Route Component
+function ProtectedRoute({ children }) {
+  const { user, loading } = useAuth();
 
   if (loading) {
     return (
-      <div className="civic-app">
-        <div className="civic-loading-container">
-          <div className="civic-loading-spinner"></div>
-          <h2>Loading CivicEye...</h2>
-          <p>Connecting to secure servers</p>
-        </div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="civic-spinner">🏛️</div>
       </div>
     );
   }
 
-  // Show login if not authenticated
-  if (!isAuthenticated) {
+  if (!user) {
     return <LoginPage />;
   }
 
-  // Show report form
-  if (showReportForm) {
-    return (
-      <ReportForm
-        onBack={handleReportFormBack}
-        preSelectedCategory={selectedCategory}
-      />
-    );
-  }
-
-  // Main authenticated app
-  return (
-    <div className="civic-app">
-      <div className="civic-main-content">
-        {currentPage === "home" && (
-          <HomePage
-            onCategorySelect={handleCategorySelect}
-            onReportClick={handleReportIssueClick}
-          />
-        )}
-        {currentPage === "profile" && <ProfilePage />}
-        {currentPage === "reports" && <ReportsPage />}
-      </div>
-
-      <Navigation currentPage={currentPage} setCurrentPage={setCurrentPage} />
-    </div>
-  );
+  return children;
 }
 
-// App wrapper with Auth Provider
+// Main App Component
 function App() {
   return (
     <AuthProvider>
-      <AppContent />
+      <Router>
+        <div className="min-h-screen bg-slate-100">
+          <Routes>
+            {/* Public Route - Login */}
+            <Route path="/login" element={<LoginPage />} />
+
+            {/* Protected Routes */}
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <HomePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/report"
+              element={
+                <ProtectedRoute>
+                  <ReportForm />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </div>
+      </Router>
     </AuthProvider>
   );
 }

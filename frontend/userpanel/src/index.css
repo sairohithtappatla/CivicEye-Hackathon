@@ -1,55 +1,327 @@
 /* CSS Reset and Base Styles */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CivicEye Custom Styles */
+.civic-spinner {
+  @apply text-4xl animate-spin;
 }
 
-html {
-  height: 100%;
-  -webkit-text-size-adjust: 100%;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  /* Mobile specific */
-  overflow: hidden;
-  position: fixed;
-  width: 100%;
+.civic-spinner-small {
+  @apply w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin;
 }
 
-body {
-  height: 100%;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  color: #1f2937;
-  line-height: 1.6;
-  /* Mobile specific */
-  overflow: hidden;
-  position: fixed;
-  width: 100%;
-  -webkit-overflow-scrolling: touch;
+.civic-spinner-small-perfect {
+  @apply w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin;
 }
 
-#root {
-  height: 100vh;
-  width: 100%;
-  position: relative;
-  overflow: hidden;
+/* Login Page Styles */
+.civic-login-page-perfect {
+  @apply min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4;
 }
 
-/* CSS Variables for Blue & White Theme with Saffron Accents */
-:root {
-  --primary-blue: #3b82f6;
-  --primary-blue-dark: #1e40af;
-  --primary-blue-light: #dbeafe;
-  --secondary-white: #ffffff;
-  --accent-saffron: #f59e0b;
-  --accent-saffron-light: #fef3c7;
-  --text-dark: #1f2937;
-  --text-light: #6b7280;
-  --border-light: #e5e7eb;
-  --success-green: #10b981;
-  --error-red: #ef4444;
-  --background-light: #f8fafc;
+.civic-login-container-perfect {
+  @apply w-full max-w-md bg-white rounded-2xl shadow-xl p-8;
+}
+
+.civic-login-header-perfect {
+  @apply text-center mb-8;
+}
+
+.civic-login-logo-perfect {
+  @apply text-4xl mb-4;
+}
+
+.civic-login-title-perfect {
+  @apply text-2xl font-bold text-gray-800 mb-2;
+}
+
+.civic-login-subtitle-perfect {
+  @apply text-gray-600;
+}
+
+.civic-sample-accounts-perfect {
+  @apply mb-6;
+}
+
+.civic-sample-title {
+  @apply text-sm font-semibold text-gray-700 mb-3;
+}
+
+.civic-sample-grid {
+  @apply space-y-2;
+}
+
+.civic-sample-btn-perfect {
+  @apply w-full p-3 bg-gray-50 hover:bg-gray-100 rounded-lg border text-left transition-colors;
+}
+
+.civic-sample-role {
+  @apply font-medium text-gray-800;
+}
+
+.civic-sample-email {
+  @apply text-sm text-gray-600;
+}
+
+.civic-login-tabs-perfect {
+  @apply flex mb-6 bg-gray-100 rounded-lg p-1;
+}
+
+.civic-login-tab-perfect {
+  @apply flex-1 py-2 px-4 rounded-md text-center transition-colors;
+}
+
+.civic-login-tab-perfect.active {
+  @apply bg-white text-blue-600 font-medium shadow-sm;
+}
+
+.civic-login-form-perfect {
+  @apply space-y-4;
+}
+
+.civic-input-group-perfect {
+  @apply relative;
+}
+
+.civic-input-icon {
+  @apply absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400;
+}
+
+.civic-input-field-perfect {
+  @apply w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors;
+}
+
+.civic-password-toggle {
+  @apply absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600;
+}
+
+.civic-message-perfect {
+  @apply p-3 rounded-lg text-sm text-center;
+}
+
+.civic-message-perfect.success {
+  @apply bg-green-100 text-green-800;
+}
+
+.civic-message-perfect.error {
+  @apply bg-red-100 text-red-800;
+}
+
+.civic-login-button-perfect {
+  @apply w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center;
+}
+
+.civic-login-footer-perfect {
+  @apply text-center text-xs text-gray-500 mt-6;
+}
+
+/* Section Styles */
+.civic-section {
+  @apply mb-8;
+}
+
+.civic-section-header {
+  @apply text-center mb-6;
+}
+
+.civic-section-title {
+  @apply text-2xl font-bold text-gray-800 mb-2;
+}
+
+.civic-section-subtitle {
+  @apply text-gray-600;
+}
+
+.civic-hero-card {
+  @apply bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-8 text-white text-center shadow-lg;
+}
+
+.civic-hero-title {
+  @apply text-3xl font-bold mb-4;
+}
+
+.civic-hero-subtitle {
+  @apply text-blue-100 mb-6;
+}
+
+.civic-hero-button {
+  @apply bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors;
+}
+
+.civic-categories-grid {
+  @apply grid grid-cols-2 md:grid-cols-3 gap-4;
+}
+
+.civic-category-card {
+  @apply bg-white p-6 rounded-xl shadow-md hover:shadow-lg cursor-pointer transition-all transform hover:scale-105;
+}
+
+.civic-category-icon {
+  @apply text-3xl mb-3;
+}
+
+.civic-category-name {
+  @apply font-semibold text-gray-800 mb-2;
+}
+
+.civic-category-desc {
+  @apply text-sm text-gray-600;
+}
+
+.civic-stats-grid {
+  @apply grid grid-cols-3 gap-4;
+}
+
+.civic-stat-card {
+  @apply bg-white p-6 rounded-xl shadow-md text-center;
+}
+
+.civic-stat-icon {
+  @apply text-2xl mb-2;
+}
+
+.civic-stat-number {
+  @apply text-2xl font-bold text-gray-800 mb-1;
+}
+
+.civic-stat-label {
+  @apply text-sm text-gray-600;
+}
+
+.civic-trending-wrapper-perfect {
+  @apply space-y-4;
+}
+
+.civic-trending-card-perfect {
+  @apply bg-white p-4 rounded-lg shadow-md flex items-center justify-between;
+}
+
+.civic-trending-icon-wrapper {
+  @apply flex-shrink-0;
+}
+
+.civic-trending-icon-emoji {
+  @apply text-2xl;
+}
+
+.civic-trending-info-perfect {
+  @apply flex-1 ml-4;
+}
+
+.civic-trending-title-perfect {
+  @apply font-semibold text-gray-800;
+}
+
+.civic-trending-count-perfect {
+  @apply text-sm text-gray-600;
+}
+
+.civic-trending-button-perfect {
+  @apply bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors;
+}
+
+/* Report Form Styles */
+.civic-report-form {
+  @apply min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4;
+}
+
+.civic-form-header {
+  @apply flex items-center justify-between mb-6;
+}
+
+.civic-back-button {
+  @apply p-2 text-gray-600 hover:text-gray-800 text-xl;
+}
+
+.civic-form-title {
+  @apply text-xl font-bold text-gray-800;
+}
+
+.civic-form-progress {
+  @apply text-sm text-gray-600;
+}
+
+.civic-form-container {
+  @apply max-w-md mx-auto;
+}
+
+.civic-form {
+  @apply bg-white rounded-2xl shadow-lg p-6 space-y-6;
+}
+
+.civic-submit-section {
+  @apply pt-6;
+}
+
+.civic-submit-button {
+  @apply w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2;
+}
+
+.civic-submit-footer {
+  @apply text-xs text-gray-500 text-center mt-4;
+}
+
+/* Government Form Styles */
+.gov-card {
+  @apply w-full max-w-[400px] bg-white rounded-2xl shadow-lg p-6 mx-auto;
+}
+
+.gov-title {
+  @apply text-2xl font-bold text-center text-indigo-700 mb-2;
+}
+
+.gov-tag {
+  @apply text-center text-gray-600 mb-6;
+}
+
+.gov-input {
+  @apply w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 outline-none mb-4;
+}
+
+.gov-btn {
+  @apply w-full bg-indigo-600 text-white font-semibold py-3 rounded-lg transition duration-300 ease-in-out hover:bg-indigo-700;
+}
+
+.gov-btn-secondary {
+  @apply w-full bg-green-600 text-white font-semibold py-3 rounded-lg transition duration-300 ease-in-out hover:bg-green-700;
+}
+
+.gov-field {
+  @apply mb-4;
+}
+
+.gov-hero {
+  @apply text-center mb-6;
+}
+
+.gov-badge {
+  @apply inline-block bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full font-medium;
+}
+
+.gov-file-btn {
+  @apply bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg border border-gray-300 transition-colors cursor-pointer;
+}
+
+.gov-file {
+  @apply cursor-pointer;
+}
+
+.gov-file-info {
+  @apply mb-3;
+}
+
+.gov-preview {
+  @apply rounded-lg border border-gray-200;
+}
+
+.gov-loc-btn {
+  @apply bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm transition-colors;
+}
+
+.gov-toast {
+  @apply fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg z-50;
 }
 
 /* =================================================================
@@ -231,7 +503,7 @@ body {
   font-weight: 600;
   color: var(--text-dark);
   margin: 0 0 4px 0;
-  line-height: 1.3;
+  line-height: 2.3;
 }
 
 .civic-section-subtitle {
@@ -364,7 +636,6 @@ body {
   background: rgba(255, 255, 255, 0.7) !important;
   padding: 3px 10px !important;
   border-radius: 10px !important;
-  animation: pulse-hint 2s ease-in-out infinite !important;
 }
 
 /* City Progress Stats */
@@ -2561,7 +2832,7 @@ body {
 
 .civic-impact-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 
 .civic-impact-card-primary {
@@ -2951,68 +3222,625 @@ body {
   max-width: 300px;
 }
 
-/* Achievements Grid */
-.civic-achievements-grid {
+/* =================================================================
+   PERFECT COMMUNITY IMPACT GRID - 3 IN A ROW
+   ================================================================= */
+
+.civic-stats-grid-perfect {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 8px;
 }
 
-.civic-achievement-card {
+.civic-stat-card-perfect {
   background: var(--secondary-white);
-  border-radius: 12px;
-  padding: 20px;
+  border-radius: 16px;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
   border: 1px solid var(--border-light);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  position: relative;
+  overflow: hidden;
+  min-height: 90px;
+  justify-content: center;
+}
+
+.civic-stat-card-perfect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--stat-color, var(--primary-blue));
+}
+
+.civic-stat-card-perfect.civic-stat-primary {
+  --stat-color: var(--primary-blue);
+}
+
+.civic-stat-card-perfect.civic-stat-success {
+  --stat-color: var(--success-green);
+}
+
+.civic-stat-card-perfect.civic-stat-info {
+  --stat-color: var(--accent-saffron);
+}
+
+.civic-stat-card-perfect.civic-stat-danger {
+  --stat-color: var(--error-red);
+}
+
+.civic-stat-card-perfect:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.civic-stat-card-perfect .civic-stat-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.civic-stat-card-perfect .civic-stat-content {
+  width: 100%;
+}
+
+.civic-stat-card-perfect .civic-stat-number {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-dark);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.civic-stat-card-perfect .civic-stat-label {
+  font-size: 11px;
+  color: var(--text-light);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* =================================================================
+   PERFECT TRENDING SECTION - MOBILE RESPONSIVE
+   ================================================================= */
+
+.civic-trending-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--secondary-white);
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid var(--border-light);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.civic-trending-item-perfect {
   display: flex;
   align-items: center;
-  gap: 16px;
-  transition: all 0.2s ease;
-}
-
-.civic-achievement-card.earned {
-  border-color: var(--success-green);
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(16, 185, 129, 0.1));
-}
-
-.civic-achievement-card.locked {
-  opacity: 0.6;
+  gap: 12px;
+  padding: 12px;
   background: var(--background-light);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  cursor: pointer;
 }
 
-.civic-achievement-icon {
-  font-size: 32px;
+.civic-trending-item-perfect:hover {
+  background: var(--primary-blue-light);
+  transform: translateX(4px);
+}
+
+.civic-trending-icon-perfect {
+  font-size: 20px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--secondary-white);
+  border-radius: 10px;
   flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.civic-achievement-content {
+.civic-trending-content-perfect {
   flex: 1;
+  min-width: 0;
 }
 
-.civic-achievement-title {
+.civic-trending-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 2px;
+  text-transform: capitalize;
+  line-height: 1.2;
+}
+
+.civic-trending-count {
+  font-size: 12px;
+  color: var(--text-light);
+  line-height: 1.2;
+  margin: 0;
+}
+
+.civic-trending-chart-perfect {
+  font-size: 16px;
+  color: var(--success-green);
+  flex-shrink: 0;
+  width: 32px;
+  text-align: center;
+}
+
+/* =================================================================
+   MOBILE RESPONSIVE BREAKPOINTS - PERFECT ALIGNMENT
+   ================================================================= */
+
+/* Small Mobile (320px - 480px) */
+@media screen and (max-width: 480px) {
+  .civic-stats-grid-perfect {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .civic-stat-card-perfect {
+    padding: 14px 10px;
+    min-height: 80px;
+  }
+
+  .civic-stat-card-perfect .civic-stat-icon {
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
+
+  .civic-stat-card-perfect .civic-stat-number {
+    font-size: 20px;
+  }
+
+  .civic-stat-card-perfect .civic-stat-label {
+    font-size: 10px;
+  }
+
+  .civic-trending-container {
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .civic-trending-item-perfect {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .civic-trending-icon-perfect {
+    width: 40px;
+    height: 40px;
+  }
+
+  .civic-trending-name {
+    font-size: 13px;
+  }
+
+  .civic-trending-count {
+    font-size: 11px;
+  }
+
+  .civic-trending-chart-perfect {
+    font-size: 14px;
+    width: 28px;
+  }
+}
+
+/* Medium Mobile (481px - 768px) */
+@media screen and (min-width: 481px) and (max-width: 768px) {
+  .civic-trending-wrapper-perfect {
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .civic-trending-card-perfect {
+    padding: 14px;
+    gap: 14px;
+  }
+
+  .civic-trending-icon-wrapper {
+    width: 44px;
+    height: 44px;
+  }
+
+  .civic-trending-category-name {
+    font-size: 15px;
+  }
+}
+
+/* Tablet (769px - 1024px) */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .civic-stats-grid-perfect {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    max-width: 600px;
+    margin: 0 auto 8px auto;
+  }
+}
+
+/* Desktop (1025px+) */
+@media screen and (min-width: 1025px) {
+  .civic-stats-grid-perfect {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-width: 700px;
+    margin: 0 auto 8px auto;
+  }
+
+  .civic-trending-container {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+}
+
+/* =================================================================
+   CATEGORY CARDS IMPROVEMENTS
+   ================================================================= */
+
+.civic-category-card-horizontal {
+  min-width: 160px;
+  width: 160px;
+  background: var(--secondary-white);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 16px 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  min-height: 100px;
+  justify-content: center;
+}
+
+.civic-category-card-horizontal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--category-color, var(--primary-blue));
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.civic-category-card-horizontal:hover::before {
+  transform: scaleX(1);
+}
+
+.civic-category-card-horizontal:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+  border-color: var(--category-color, var(--primary-blue));
+}
+
+.civic-category-icon-large {
+  font-size: 28px;
+  margin-bottom: 8px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.civic-category-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+}
+
+.civic-category-name-compact {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.civic-category-desc-compact {
+  font-size: 11px;
+  color: var(--text-light);
+  margin: 0;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Mobile category cards adjustments */
+@media screen and (max-width: 480px) {
+  .civic-category-card-horizontal {
+    min-width: 140px;
+    width: 140px;
+    padding: 12px 10px;
+    min-height: 90px;
+  }
+
+  .civic-category-icon-large {
+    font-size: 24px;
+    margin-bottom: 6px;
+  }
+
+  .civic-category-name-compact {
+    font-size: 13px;
+  }
+
+  .civic-category-desc-compact {
+    font-size: 10px;
+  }
+}
+
+@media screen and (min-width: 481px) and (max-width: 768px) {
+  .civic-category-card-horizontal {
+    min-width: 150px;
+    width: 150px;
+    min-height: 95px;
+  }
+}
+
+/* =================================================================
+   SECTION SPACING IMPROVEMENTS
+   ================================================================= */
+
+.civic-section {
+  margin: 16px 16px 24px 16px;
+}
+
+.civic-section-header {
+  margin-bottom: 12px;
+}
+
+.civic-section-title {
   font-size: 16px;
   font-weight: 600;
   color: var(--text-dark);
   margin: 0 0 4px 0;
+  line-height: 2.3;
 }
 
-.civic-achievement-description {
-  font-size: 14px;
-  color: var(--text-light);
-  margin: 0 0 8px 0;
-}
-
-.civic-achievement-earned {
+.civic-section-subtitle {
   font-size: 12px;
-  color: var(--success-green);
-  font-weight: 500;
+  color: var(--text-light);
+  margin: 0;
+  line-height: 1.3;
 }
 
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
+/* Small mobile section adjustments */
+@media screen and (max-width: 480px) {
+  .civic-section {
+    margin: 12px 12px 20px 12px;
   }
 
-  100% {
-    transform: rotate(360deg);
+  .civic-section-title {
+    font-size: 15px;
+  }
+
+  .civic-section-subtitle {
+    font-size: 11px;
+  }
+}
+
+/* =================================================================
+   SCROLL INDICATOR IMPROVEMENTS
+   ================================================================= */
+
+.civic-scroll-indicator {
+  text-align: center;
+  margin-top: 8px;
+}
+
+.civic-scroll-indicator span {
+  font-size: 11px;
+  color: var(--text-light);
+  font-style: italic;
+  opacity: 0.7;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 4px 12px;
+  border-radius: 12px;
+  display: inline-block;
+}
+
+/* Hide scroll indicator on desktop */
+@media screen and (min-width: 769px) {
+  .civic-scroll-indicator {
+    display: none;
+  }
+}
+
+/* =================================================================
+   PERFORMANCE OPTIMIZATIONS
+   ================================================================= */
+
+.civic-stat-card-perfect,
+.civic-trending-item-perfect,
+.civic-category-card-horizontal {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+
+  .civic-stat-card-perfect,
+  .civic-trending-item-perfect,
+  .civic-category-card-horizontal {
+    transition: none;
+  }
+
+  .civic-stat-card-perfect:hover,
+  .civic-trending-item-perfect:hover,
+  .civic-category-card-horizontal:hover {
+    transform: none;
+  }
+}
+
+/* =================================================================
+   PERFECT TRENDING SECTION ALIGNMENT
+   ================================================================= */
+
+.civic-trending-wrapper-perfect {
+  background: var(--secondary-white);
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid var(--border-light);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.civic-trending-card-perfect {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: var(--background-light);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.civic-trending-card-perfect:hover {
+  background: var(--primary-blue-light);
+  border-color: var(--primary-blue);
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.civic-trending-icon-wrapper {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  background: var(--secondary-white);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-light);
+}
+
+.civic-trending-icon-emoji {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.civic-trending-info-perfect {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.civic-trending-category-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-dark);
+  text-transform: capitalize;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.civic-trending-report-count {
+  font-size: 13px;
+  color: var(--text-light);
+  line-height: 1.2;
+  margin: 0;
+}
+
+.civic-trending-indicator {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+}
+
+.civic-trending-arrow {
+  font-size: 16px;
+  color: var(--success-green);
+  transition: all 0.2s ease;
+}
+
+.civic-trending-card-perfect:hover .civic-trending-arrow {
+  transform: scale(1.1);
+}
+
+/* Mobile responsive for trending */
+@media screen and (max-width: 480px) {
+  .civic-trending-wrapper-perfect {
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .civic-trending-card-perfect {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .civic-trending-icon-wrapper {
+    width: 40px;
+    height: 40px;
+  }
+
+  .civic-trending-icon-emoji {
+    font-size: 18px;
+  }
+
+  .civic-trending-category-name {
+    font-size: 14px;
+  }
+
+  .civic-trending-report-count {
+    font-size: 12px;
+  }
+
+  .civic-trending-indicator {
+    width: 28px;
+    height: 28px;
+  }
+
+  .civic-trending-arrow {
+    font-size: 14px;
+  }
+}
+
+@media screen and (min-width: 481px) and (max-width: 768px) {
+  .civic-trending-wrapper-perfect {
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .civic-trending-card-perfect {
+    padding: 14px;
+    gap: 14px;
+  }
+
+  .civic-trending-icon-wrapper {
+    width: 44px;
+    height: 44px;
+  }
+
+  .civic-trending-category-name {
+    font-size: 15px;
   }
 }
